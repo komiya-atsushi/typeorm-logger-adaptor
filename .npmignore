@@ -1,0 +1,26 @@
+# Git
+.github/
+.gitignore
+
+# NPM
+node_modules/
+package-lock.json
+
+# IDE
+.idea/
+
+# TypeScript
+src/
+tsconfig.json
+tsconfig.test.json
+
+# Test
+__tests__/
+coverage/
+jest.config.js
+docker-compose.yml
+
+# ESLint/Prettier
+.eslintrc.yaml
+.prettierrc
+

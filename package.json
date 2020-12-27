@@ -1,14 +1,29 @@
 {
   "name": "typeorm-logger-adaptor",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Logger adaptors for TypeORM",
+  "author": {
+    "name": "KOMIYA Atsushi",
+    "url": "https://github.com/komiya-atsushi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/komiya-atsushi/action-enforce-timeout-minutes.git"
+  },
+  "main": "dist/index.js",
   "scripts": {
+    "clean": "rimraf dist/",
+    "build": "npm run clean && tsc -p tsconfig.json",
     "format": "prettier --write '**/*.ts'",
     "lint": "eslint --fix --ext .ts ./",
     "test": "docker-compose up -d && jest --coverage --collect-coverage-from='src/**/*.ts'"
   },
-  "keywords": [],
+  "keywords": [
+    "typescript",
+    "typeorm",
+    "logger",
+    "winston"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.11.0",
@@ -20,6 +35,7 @@
     "jest-mock-extended": "^1.0.10",
     "mysql2": "^2.2.5",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4",
     "typeorm": "^0.2.29",
     "typescript": "^4.1.3",
