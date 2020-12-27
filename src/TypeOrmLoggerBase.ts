@@ -1,6 +1,6 @@
+import { QueryRunner } from 'typeorm';
 import { Logger } from 'typeorm/logger/Logger';
 import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
-import { QueryRunner } from 'typeorm';
 import { Formatter } from './formatter/Formatter';
 
 export type LoggerMethod = (message: string, ...rest: unknown[]) => void;
