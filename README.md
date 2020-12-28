@@ -6,7 +6,8 @@ Logger adaptors for TypeORM.
 Supported loggers
 -----------------
 
-* [Winston](https://github.com/winstonjs/winston) (>= 3.0)
+* [Bunyan](https://github.com/trentm/node-bunyan) (>= 1.8.5)
+* [Winston](https://github.com/winstonjs/winston) (>= 3.0.0)
 
 Install
 -------
