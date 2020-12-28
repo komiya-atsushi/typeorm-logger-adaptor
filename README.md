@@ -30,16 +30,7 @@ import { WinstonAdaptor } from 'typeorm-logger-adaptor';
 // Configure logger (Winston)
 const logger = winston.createLogger({
   level: 'debug',
-  levels: winston.config.npm.levels,
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.cli(),
-    winston.format.printf((info) => {
-      return info.stack
-        ? `${info.timestamp}  ${info.level} ${info.message} ${info.stack}`
-        : `${info.timestamp}  ${info.level} ${info.message}`;
-    })
-  ),
+  format: winston.format.cli(),
   transports: [new winston.transports.Console()],
 });
 
