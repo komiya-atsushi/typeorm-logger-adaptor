@@ -1,6 +1,6 @@
 import { createConnection } from 'typeorm';
 import * as winston from 'winston';
-import { WinstonAdaptor } from '../src';
+import { WinstonAdaptor } from '../dist/';
 import { TextFormatter } from '../src/formatter/TextFormatter';
 import { User } from './entity/User';
 

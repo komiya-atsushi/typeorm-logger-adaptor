@@ -11,6 +11,7 @@ package-lock.json
 
 # TypeScript
 src/
+example/
 tsconfig.json
 tsconfig.test.json
 
@@ -23,4 +24,3 @@ docker-compose.yml
 # ESLint/Prettier
 .eslintrc.yaml
 .prettierrc
-
