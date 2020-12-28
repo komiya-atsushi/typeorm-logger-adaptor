@@ -1,4 +1,5 @@
+import { BunyanAdaptor } from './BunyanAdaptor';
 import { WinstonAdaptor } from './WinstonAdaptor';
 import { Formatter } from './formatter/Formatter';
 
-export { Formatter, WinstonAdaptor };
+export { BunyanAdaptor, Formatter, WinstonAdaptor };
