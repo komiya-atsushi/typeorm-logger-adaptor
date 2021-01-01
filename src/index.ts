@@ -1,5 +1,4 @@
-import { BunyanAdaptor } from './BunyanAdaptor';
-import { WinstonAdaptor } from './WinstonAdaptor';
-import { Formatter } from './formatter/Formatter';
+import { BunyanAdaptor, BunyanLogLevelMapping } from './BunyanAdaptor';
+import { WinstonAdaptor, WinstonLogLevelMapping } from './WinstonAdaptor';
 
-export { BunyanAdaptor, Formatter, WinstonAdaptor };
+export { BunyanAdaptor, BunyanLogLevelMapping, WinstonAdaptor, WinstonLogLevelMapping };
