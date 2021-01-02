@@ -22,7 +22,8 @@
     "typescript",
     "typeorm",
     "logger",
-    "winston"
+    "winston",
+    "bunyan"
   ],
   "license": "MIT",
   "devDependencies": {
