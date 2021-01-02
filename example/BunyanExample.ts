@@ -5,7 +5,7 @@ import { BunyanAdaptor } from '../dist/';
 import { User } from './entity/User';
 
 // Configure logger (Bunyan)
-const logger = createLogger({ name: 'typeorm-logger-adaptor-bunyan-example' });
+const logger = createLogger({ name: 'typeorm-logger-adaptor-bunyan-example', level: 'debug' });
 
 const host = '127.0.0.1';
 const port = 13307;

@@ -1,7 +1,6 @@
 import { createConnection } from 'typeorm';
 import * as winston from 'winston';
 import { WinstonAdaptor } from '../dist/';
-import { TextFormatter } from '../src/formatter/TextFormatter';
 import { User } from './entity/User';
 
 // Configure logger (Winston)
@@ -29,7 +28,7 @@ createConnection({
   migrations: ['example/migration/*.ts'],
   synchronize: true,
   migrationsRun: true,
-  logger: new WinstonAdaptor(logger, 'all', new TextFormatter(true)),
+  logger: new WinstonAdaptor(logger, 'all', true),
 })
   .then(async (conn) => {
     try {
