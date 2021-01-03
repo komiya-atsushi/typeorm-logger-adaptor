@@ -1,4 +1,4 @@
 import { BunyanAdaptor, BunyanLogLevelMapping } from './BunyanAdaptor';
-import { WinstonAdaptor, WinstonLogLevelMapping } from './WinstonAdaptor';
+import { WinstonAdaptor, WinstonLoggerMethodMapping } from './WinstonAdaptor';
 
-export { BunyanAdaptor, BunyanLogLevelMapping, WinstonAdaptor, WinstonLogLevelMapping };
+export { BunyanAdaptor, BunyanLogLevelMapping, WinstonAdaptor, WinstonLoggerMethodMapping };

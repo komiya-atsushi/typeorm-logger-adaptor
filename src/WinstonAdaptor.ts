@@ -4,7 +4,7 @@ import { LeveledLogMethod, Logger as WinstonLogger } from 'winston';
 import { LoggerMethods, TypeOrmLoggerBase } from './TypeOrmLoggerBase';
 import { TextFormatter } from './formatter/TextFormatter';
 
-export interface WinstonLogLevelMapping {
+export interface WinstonLoggerMethodMapping {
   log: LeveledLogMethod;
   info: LeveledLogMethod;
   warn: LeveledLogMethod;
@@ -18,16 +18,28 @@ export interface WinstonLogLevelMapping {
 }
 
 export class WinstonAdaptor extends TypeOrmLoggerBase {
+  /**
+   * Creates a new Winston adaptor.
+   *
+   * @constructor
+   * @param {WinstonLogger} logger - The logger instance of the Winston logger.
+   * @param {TypeOrmLoggerOptions} options - LoggerOptions of the TypeORM.
+   * @param {boolean} highlightSqlEnabled - Sets true to enable SQL highlighting.
+   * @param {WinstonLoggerMethodMapping} loggerMethodMapping - Mappings between Winston logger methods and TypeORM logger methods.
+   */
   constructor(
     logger: WinstonLogger,
     options: TypeOrmLoggerOptions,
     highlightSqlEnabled = false,
-    logLevelMapping?: WinstonLogLevelMapping
+    loggerMethodMapping?: WinstonLoggerMethodMapping
   ) {
-    super(WinstonAdaptor.toLoggerMethods(logger, logLevelMapping), new TextFormatter(highlightSqlEnabled), options);
+    super(WinstonAdaptor.toLoggerMethods(logger, loggerMethodMapping), new TextFormatter(highlightSqlEnabled), options);
   }
 
-  static toLoggerMethods(logger: WinstonLogger, logLevelMapping: WinstonLogLevelMapping | undefined): LoggerMethods {
+  static toLoggerMethods(
+    logger: WinstonLogger,
+    logLevelMapping: WinstonLoggerMethodMapping | undefined
+  ): LoggerMethods {
     if (logLevelMapping === undefined) {
       return this.createLoggerMethods({
         log: (first: unknown, ...rest: unknown[]) => logger.debug(first as string, ...rest),

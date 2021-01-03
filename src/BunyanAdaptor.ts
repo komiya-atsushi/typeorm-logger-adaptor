@@ -17,6 +17,14 @@ export interface BunyanLogLevelMapping {
 }
 
 export class BunyanAdaptor extends TypeOrmLoggerBase {
+  /**
+   * Creates a new Bunyan adaptor.
+   *
+   * @constructor
+   * @param {Logger} logger - The instance of the Bunyan logger.
+   * @param {TypeOrmLoggerOptions} options - LoggerOptions of the TypeORM.
+   * @param {BunyanLogLevelMapping} logLevelMapping - Bunyan log levels that each logger method of the TypeORM uses.
+   */
   constructor(logger: Logger, options: TypeOrmLoggerOptions, logLevelMapping?: BunyanLogLevelMapping) {
     super(BunyanAdaptor.toLoggerMethods(logger, logLevelMapping), new TextFormatter(), options);
   }
@@ -31,14 +39,13 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
       });
     }
 
+    const { log, info, warn, error, query, queryError, querySlow, schemaBuild, migration } = logLevelMapping;
     const result = this.createLoggerMethods({
-      log: (first: unknown, ...rest: unknown[]) => logger[logLevelMapping.log](first, ...rest),
-      info: (first: unknown, ...rest: unknown[]) => logger[logLevelMapping.info](first, ...rest),
-      warn: (first: unknown, ...rest: unknown[]) => logger[logLevelMapping.warn](first, ...rest),
-      error: (first: unknown, ...rest: unknown[]) => logger[logLevelMapping.error](first, ...rest),
+      log: (first: unknown, ...rest: unknown[]) => logger[log](first, ...rest),
+      info: (first: unknown, ...rest: unknown[]) => logger[info](first, ...rest),
+      warn: (first: unknown, ...rest: unknown[]) => logger[warn](first, ...rest),
+      error: (first: unknown, ...rest: unknown[]) => logger[error](first, ...rest),
     });
-
-    const { query, queryError, querySlow, schemaBuild, migration } = logLevelMapping;
 
     if (query !== undefined) {
       result.query = (first: unknown, ...rest: unknown[]) => logger[query](first, ...rest);
