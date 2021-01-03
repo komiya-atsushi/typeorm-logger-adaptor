@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/komiya-atsushi/action-enforce-timeout-minutes.git"
+    "url": "git+https://github.com/komiya-atsushi/typeorm-logger-adaptor.git"
   },
   "main": "dist/index.js",
   "scripts": {
