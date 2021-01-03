@@ -1,6 +1,8 @@
 typeorm-logger-adaptor
 ======================
 
+[![npm version](https://badge.fury.io/js/typeorm-logger-adaptor.svg)](https://badge.fury.io/js/typeorm-logger-adaptor)
+
 Logger adaptors for TypeORM.
 
 Supported loggers
