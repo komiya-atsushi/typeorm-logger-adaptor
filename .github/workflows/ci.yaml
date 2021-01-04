@@ -1,0 +1,19 @@
+name: Continuous integration
+
+on:
+  - push
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - run: npm install
+
+      - run: npm test
