@@ -3,6 +3,7 @@
   "include": [
     "src/**/*.ts",
     "__tests__/**/*.ts",
-    "example/**/*.ts"
+    "example/**/*.ts",
+    "gulpfile.ts"
   ]
 }
