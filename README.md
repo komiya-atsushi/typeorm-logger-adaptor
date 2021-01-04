@@ -22,13 +22,23 @@ npm install typeorm-logger-adaptor
 yarn add typeorm-logger-adaptor
 ```
 
+How to use
+----------
+
+1. Install `typeorm-logger-adaptor`, `typeorm` and a logger library you want to use.
+2. `import { XxxAdaptor } from 'typeorm-logger-adaptor/logger/xxx';`.
+    * Replace `xxx` with logger library name (e.g. `winston`, `bunyan`).
+3. Create and configure a logger instance. 
+4. Create an adaptor instance and configure TypeORM connection.
+    * See [here](https://typeorm.io/#/logging/using-custom-logger) for details.
+
 Example
 -------
 
 ```typescript
 import { createConnection } from 'typeorm';
 import * as winston from 'winston';
-import { WinstonAdaptor } from 'typeorm-logger-adaptor';
+import { WinstonAdaptor } from 'typeorm-logger-adaptor/logger/winston';
 
 // Configure logger (Winston)
 const logger = winston.createLogger({
