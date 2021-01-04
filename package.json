@@ -8,9 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/komiya-atsushi/typeorm-logger-adaptor.git"
+    "url": "https://github.com/komiya-atsushi/typeorm-logger-adaptor.git"
   },
-  "main": "dist/index.js",
+  "bugs": {
+    "url": "https://github.com/komiya-atsushi/typeorm-logger-adaptor/issues"
+  },
+  "main": "./index.js",
   "scripts": {
     "clean": "rimraf dist/",
     "build": "npm run clean && tsc -p tsconfig.json",
@@ -40,8 +43,11 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4",
-    "typeorm": "^0.2.29",
+    "typeorm": "^0.2.0",
     "typescript": "^4.1.3",
     "winston": "^3.0.0"
+  },
+  "peerDependencies": {
+    "typeorm": "^0.2.0"
   }
 }
