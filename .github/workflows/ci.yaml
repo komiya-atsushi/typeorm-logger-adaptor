@@ -9,6 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
       - name: Cache node modules
         id: cache-node-modules
         uses: actions/cache@v2
@@ -21,11 +26,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
 
       - run: npm install
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
@@ -37,6 +37,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
       - name: Cache node modules
         id: cache-node-modules
         uses: actions/cache@v2
@@ -49,11 +54,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
 
       - run: npm install
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
