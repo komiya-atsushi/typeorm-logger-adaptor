@@ -1,8 +1,8 @@
 import Logger from 'bunyan';
 import { LoggerOptions as TypeOrmLoggerOptions } from 'typeorm/logger/LoggerOptions';
 
-import { LoggerMethods, TypeOrmLoggerBase } from './TypeOrmLoggerBase';
-import { TextFormatter } from './formatter/TextFormatter';
+import { LoggerMethods, TypeOrmLoggerBase } from '../../core/TypeOrmLoggerBase';
+import { TextFormatter } from '../../core/formatter/TextFormatter';
 
 export interface BunyanLogLevelMapping {
   log: Logger.LogLevelString;

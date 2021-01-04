@@ -1,8 +1,8 @@
 import { LoggerOptions as TypeOrmLoggerOptions } from 'typeorm/logger/LoggerOptions';
 import { LeveledLogMethod, Logger as WinstonLogger } from 'winston';
 
-import { LoggerMethods, TypeOrmLoggerBase } from './TypeOrmLoggerBase';
-import { TextFormatter } from './formatter/TextFormatter';
+import { LoggerMethods, TypeOrmLoggerBase } from '../../core/TypeOrmLoggerBase';
+import { TextFormatter } from '../../core/formatter/TextFormatter';
 
 export interface WinstonLoggerMethodMapping {
   log: LeveledLogMethod;

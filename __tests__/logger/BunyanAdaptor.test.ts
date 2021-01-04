@@ -1,8 +1,8 @@
 import * as bunyan from 'bunyan';
 import { mock, mockReset } from 'jest-mock-extended';
 import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
-import { BunyanAdaptor } from '../src';
-import { allLoggerOptions, otherLoggerOptions } from './LoggingOptions';
+import { BunyanAdaptor } from '../../src/logger/bunyan';
+import { allLoggerOptions, otherLoggerOptions } from '../LoggingOptions';
 
 const mockRingBuffer = mock<bunyan.RingBuffer>();
 beforeEach(() => {

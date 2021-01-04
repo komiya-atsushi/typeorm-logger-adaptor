@@ -1,8 +1,8 @@
 import { mock, mockReset } from 'jest-mock-extended';
 import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
 import * as winston from 'winston';
-import { WinstonAdaptor } from '../src';
-import { allLoggerOptions, otherLoggerOptions } from './LoggingOptions';
+import { WinstonAdaptor } from '../../src/logger/winston';
+import { allLoggerOptions, otherLoggerOptions } from '../LoggingOptions';
 
 const mockStream = mock<NodeJS.WritableStream>();
 beforeEach(() => {

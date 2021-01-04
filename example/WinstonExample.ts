@@ -1,6 +1,6 @@
 import { createConnection } from 'typeorm';
 import * as winston from 'winston';
-import { WinstonAdaptor } from '../dist/';
+import { WinstonAdaptor } from '../dist/logger/winston';
 import { User } from './entity/User';
 
 // Configure logger (Winston)

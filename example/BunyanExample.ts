@@ -1,7 +1,7 @@
 import { createLogger } from 'bunyan';
 import { createConnection } from 'typeorm';
 
-import { BunyanAdaptor } from '../dist/';
+import { BunyanAdaptor } from '../dist/logger/bunyan';
 import { User } from './entity/User';
 
 // Configure logger (Bunyan)

@@ -3,7 +3,7 @@ import { createConnection, Connection } from 'typeorm';
 import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
 import { Logger } from 'winston';
 
-import { WinstonAdaptor } from '../src';
+import { WinstonAdaptor } from '../src/logger/winston';
 import { typeORMConnectionOptions } from './ConnectionOptions';
 import { DatabaseFixture } from './DatabaseFixture';
 
