@@ -1,6 +1,6 @@
 {
   "name": "typeorm-logger-adaptor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Logger adaptors for TypeORM",
   "author": {
     "name": "KOMIYA Atsushi",
