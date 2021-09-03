@@ -186,3 +186,44 @@ describe('Customized logger methods', () => {
     expect(mockStream.write).toHaveBeenNthCalledWith(5, 'info: (migration message)\n');
   });
 });
+
+describe('Using syslog levels', () => {
+  const logger = winston.createLogger({
+    levels: winston.config.syslog.levels,
+    level: 'debug',
+    format: winston.format.simple(),
+    transports: [new winston.transports.Stream({ stream: mockStream })],
+  });
+
+  test('logQuery()', () => {
+    new WinstonAdaptor(logger, 'all').logQuery('select 1');
+
+    expect(mockStream.write).toHaveBeenCalledWith('info: query: select 1\n');
+  });
+
+  test('logQueryError()', () => {
+    new WinstonAdaptor(logger, 'all').logQueryError(new Error('Error message'), 'select X from Y');
+
+    expect(mockStream.write).toHaveBeenCalledWith('error: query failed: select X from Y\n');
+  });
+
+  test('logQuerySlow()', () => {
+    new WinstonAdaptor(logger, 'all').logQuerySlow(2000, 'select sleep(2)');
+
+    expect(mockStream.write).toHaveBeenCalledWith(
+      'warning: query is slow: execution time = 2000, query = select sleep(2)\n'
+    );
+  });
+
+  test('logSchemaBuild()', () => {
+    new WinstonAdaptor(logger, 'all').logSchemaBuild('creating a new table: memo');
+
+    expect(mockStream.write).toHaveBeenCalledWith('debug: creating a new table: memo\n');
+  });
+
+  test('logMigration()', () => {
+    new WinstonAdaptor(logger, 'all').logMigration('(migration message)');
+
+    expect(mockStream.write).toHaveBeenCalledWith('debug: (migration message)\n');
+  });
+});
