@@ -41,10 +41,16 @@ export class WinstonAdaptor extends TypeOrmLoggerBase {
     logLevelMapping: WinstonLoggerMethodMapping | undefined
   ): LoggerMethods {
     if (logLevelMapping === undefined) {
+      // syslog levels do not have 'warn' level, so use 'warning' level instead
+      const warn =
+        logger.warn !== undefined
+          ? (first: unknown, ...rest: unknown[]) => logger.warn(first as string, ...rest)
+          : (first: unknown, ...rest: unknown[]) => logger.warning(first as string, ...rest);
+
       return this.createLoggerMethods({
         log: (first: unknown, ...rest: unknown[]) => logger.debug(first as string, ...rest),
         info: (first: unknown, ...rest: unknown[]) => logger.info(first as string, ...rest),
-        warn: (first: unknown, ...rest: unknown[]) => logger.warn(first as string, ...rest),
+        warn,
         error: (first: unknown, ...rest: unknown[]) => logger.error(first as string, ...rest),
       });
     }
