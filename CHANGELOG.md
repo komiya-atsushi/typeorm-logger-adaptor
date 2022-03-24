@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.1.0 / 2022-03-22
+## v1.1.0 / 2022-03-24
 
 - Bump typeorm dependency to ^0.3.0 to support new breaking version
 - Update tests to match changes
