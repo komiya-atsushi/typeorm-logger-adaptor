@@ -43,9 +43,9 @@ async function run(
 
 test('LoggerOptions: all', async () => {
   await run('all', async (mockLogger) => {
-    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: memo');
+    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
-    expect(mockLogger.info).toBeCalledTimes(12);
+    expect(mockLogger.info).toBeCalledTimes(7);
     expect(mockLogger.info).toHaveBeenNthCalledWith(
       1,
       'All classes found using provided glob pattern "__tests__/migration/*.ts" : "__tests__/migration/1600000000000-test.ts"'
@@ -53,10 +53,10 @@ test('LoggerOptions: all', async () => {
     expect(mockLogger.info).toHaveBeenNthCalledWith(2, 'query: START TRANSACTION');
     expect(mockLogger.info).toHaveBeenNthCalledWith(3, 'query: SELECT DATABASE() AS `db_name`');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
-      11,
+      6,
       'query: CREATE TABLE `memo` (`id` int NOT NULL AUTO_INCREMENT, `memo` varchar(100) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB'
     );
-    expect(mockLogger.info).toHaveBeenNthCalledWith(12, 'query: COMMIT');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(7, 'query: COMMIT');
 
     expect(mockLogger.warn).toBeCalledTimes(0);
     expect(mockLogger.error).toBeCalledTimes(0);
@@ -65,7 +65,7 @@ test('LoggerOptions: all', async () => {
 
 test('LoggerOptions: query', async () => {
   await run(['query'], async (mockLogger, conn) => {
-    expect(mockLogger.info).toBeCalledTimes(11);
+    expect(mockLogger.info).toBeCalledTimes(6);
 
     mockReset(mockLogger);
 
@@ -81,7 +81,7 @@ test('LoggerOptions: query', async () => {
 
 test('LoggerOptions: schema', async () => {
   await run(['schema'], async (mockLogger) => {
-    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: memo');
+    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
     expect(mockLogger.info).toBeCalledTimes(0);
     expect(mockLogger.warn).toBeCalledTimes(0);
@@ -103,7 +103,7 @@ test('LoggerOptions: migration', async () => {
       expect(mockLogger.debug).toBeCalledTimes(4);
       expect(mockLogger.debug).toHaveBeenNthCalledWith(1, '0 migrations are already loaded in the database.');
       expect(mockLogger.debug).toHaveBeenNthCalledWith(2, '1 migrations were found in the source code.');
-      expect(mockLogger.debug).toHaveBeenNthCalledWith(3, '1 migrations are new migrations that needs to be executed.');
+      expect(mockLogger.debug).toHaveBeenNthCalledWith(3, '1 migrations are new migrations must be executed.');
       expect(mockLogger.debug).toHaveBeenNthCalledWith(
         4,
         'Migration Test1600000000000 has been executed successfully.'
