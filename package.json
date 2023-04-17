@@ -44,7 +44,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "gulpclass": "^0.2.0",
     "jest": "^27.0.6",
-    "jest-junit": "^12.2.0",
+    "jest-junit": "^16.0.0",
     "jest-mock-extended": "^1.0.16",
     "mysql2": "^2.2.5",
     "prettier": "^2.3.2",
