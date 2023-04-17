@@ -1,4 +1,4 @@
-name: Continuous integration
+name: CI
 
 on:
   - push
@@ -33,11 +33,13 @@ jobs:
       - name: Run test
         run: npm run test:ci
 
-      - name: Report test result
-        uses: IgnusG/jest-report-action@v2.3.3
-        if: always()
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: success() || failure()
         with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
+          name: test-results
+          path: __tests__/__results__/jest-junit.xml
+
   lint:
     runs-on: ubuntu-20.04
     steps:
