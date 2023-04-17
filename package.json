@@ -19,7 +19,7 @@
     "format": "prettier --write '**/*.ts' && eslint --fix --ext .ts ./",
     "lint": "prettier --check '**/*.ts' && eslint --ext .ts ./",
     "test": "docker compose up -d && jest --coverage --collect-coverage-from='src/**/*.ts'",
-    "test:ci": "docker compose up -d && jest --ci --reporters=default --reporters=jest-junit"
+    "test:ci": "docker compose up -d && jest --ci"
   },
   "keywords": [
     "typescript",

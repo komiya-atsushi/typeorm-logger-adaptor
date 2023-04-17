@@ -8,6 +8,10 @@ module.exports = {
     [
       'jest-junit',
       {
+        outputDirectory: '__tests__/__results__',
+        outputName: 'jest-junit.xml',
+        ancestorSeparator: ' › ',
+        uniqueOutputName: 'false',
         suiteNameTemplate: '{filepath}',
         classNameTemplate: '{classname}',
         titleTemplate: '{title}',
