@@ -24,7 +24,7 @@ export const typeORMConnectionOptions: TypeORMConnectionOptions = {
   password,
   entities: [Memo],
   maxQueryExecutionTime: 900,
-  migrations: ['__tests__/migration/*.ts'],
+  migrations: ['test/migration/*.ts'],
   synchronize: true,
   migrationsRun: false,
 };

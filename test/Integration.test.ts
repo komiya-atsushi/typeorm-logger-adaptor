@@ -49,7 +49,7 @@ test('LoggerOptions: all', async () => {
     expect(mockLogger.info).toHaveBeenNthCalledWith(1, 'query: SELECT VERSION() AS `version`');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
       2,
-      'All classes found using provided glob pattern "__tests__/migration/*.ts" : "__tests__/migration/1600000000000-test.ts"'
+      'All classes found using provided glob pattern "test/migration/*.ts" : "test/migration/1600000000000-test.ts"'
     );
     expect(mockLogger.info).toHaveBeenNthCalledWith(3, 'query: START TRANSACTION');
     expect(mockLogger.info).toHaveBeenNthCalledWith(4, 'query: SELECT DATABASE() AS `db_name`');

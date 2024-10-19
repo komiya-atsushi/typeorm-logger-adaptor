@@ -1,14 +1,12 @@
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  testMatch: ['**/__tests__/**/*.test.ts'],
+  preset: 'ts-jest/presets/default',
   testTimeout: 60000,
   reporters: [
     'default',
     [
       'jest-junit',
       {
-        outputDirectory: '__tests__/__results__',
+        outputDirectory: 'reports',
         outputName: 'jest-junit.xml',
         ancestorSeparator: ' › ',
         uniqueOutputName: 'false',
@@ -18,7 +16,4 @@ module.exports = {
       },
     ],
   ],
-  transform: {
-    '^.+\\.ts$': 'ts-jest'
-  },
 };
