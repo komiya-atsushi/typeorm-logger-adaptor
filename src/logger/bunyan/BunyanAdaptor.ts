@@ -1,8 +1,8 @@
 import Logger from 'bunyan';
-import { LoggerOptions as TypeOrmLoggerOptions } from 'typeorm/logger/LoggerOptions';
+import {LoggerOptions as TypeOrmLoggerOptions} from 'typeorm/logger/LoggerOptions';
 
-import { LoggerMethods, TypeOrmLoggerBase } from '../../core/TypeOrmLoggerBase';
-import { TextFormatter } from '../../core/formatter/TextFormatter';
+import {LoggerMethods, TypeOrmLoggerBase} from '../../core/TypeOrmLoggerBase';
+import {TextFormatter} from '../../core/formatter/TextFormatter';
 
 export interface BunyanLogLevelMapping {
   log: Logger.LogLevelString;
@@ -39,7 +39,7 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
       });
     }
 
-    const { log, info, warn, error, query, queryError, querySlow, schemaBuild, migration } = logLevelMapping;
+    const {log, info, warn, error, query, queryError, querySlow, schemaBuild, migration} = logLevelMapping;
     const result = this.createLoggerMethods({
       log: (first: unknown, ...rest: unknown[]) => logger[log](first, ...rest),
       info: (first: unknown, ...rest: unknown[]) => logger[info](first, ...rest),
@@ -67,30 +67,30 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
   }
 
   protected _logQuery(query: string, parameters?: unknown[]): void {
-    this.loggerMethods.query({ type: 'Query' }, this.formatter.formatQuery(query, parameters));
+    this.loggerMethods.query({type: 'Query'}, this.formatter.formatQuery(query, parameters));
   }
 
   protected _logQueryError(error: string | Error, query: string, parameters?: unknown[]): void {
     const message = this.formatter.formatQueryError(error, query, parameters);
     if (error instanceof Error) {
-      this.loggerMethods.queryError({ type: 'QueryError', err: Logger.stdSerializers.err(error) }, message);
+      this.loggerMethods.queryError({type: 'QueryError', err: Logger.stdSerializers.err(error)}, message);
     } else {
-      this.loggerMethods.queryError({ type: 'QueryError' }, `${message}. ${error}`);
+      this.loggerMethods.queryError({type: 'QueryError'}, `${message}. ${error}`);
     }
   }
 
   protected _logQuerySlow(time: number, query: string, parameters?: unknown[]): void {
     this.loggerMethods.querySlow(
-      { type: 'QuerySlow', executionTime: time },
-      this.formatter.formatQuerySlow(time, query, parameters)
+      {type: 'QuerySlow', executionTime: time},
+      this.formatter.formatQuerySlow(time, query, parameters),
     );
   }
 
   protected _logSchemaBuild(message: string): void {
-    this.loggerMethods.schemaBuild({ type: 'SchemaBuild' }, message);
+    this.loggerMethods.schemaBuild({type: 'SchemaBuild'}, message);
   }
 
   protected _logMigration(message: string): void {
-    this.loggerMethods.migration({ type: 'Migration' }, message);
+    this.loggerMethods.migration({type: 'Migration'}, message);
   }
 }

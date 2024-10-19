@@ -1,7 +1,7 @@
-import { QueryRunner } from 'typeorm';
-import { Logger } from 'typeorm/logger/Logger';
-import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
-import { Formatter } from './formatter/Formatter';
+import {QueryRunner} from 'typeorm';
+import {Logger} from 'typeorm/logger/Logger';
+import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+import {Formatter} from './formatter/Formatter';
 
 export type LoggerMethod = (first: unknown, ...rest: unknown[]) => void;
 
@@ -40,7 +40,7 @@ export abstract class TypeOrmLoggerBase implements Logger {
   protected constructor(
     loggerMethods: LoggerMethods,
     protected readonly formatter: Formatter,
-    options?: LoggerOptions
+    options?: LoggerOptions,
   ) {
     this.loggerMethods = Object.assign(loggerMethods);
 

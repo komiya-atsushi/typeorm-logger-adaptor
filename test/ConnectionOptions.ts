@@ -1,7 +1,7 @@
-import { ConnectionOptions as MySQLConnectionOptions } from 'mysql2';
-import { MysqlConnectionOptions as TypeORMConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import {ConnectionOptions as MySQLConnectionOptions} from 'mysql2';
+import {MysqlConnectionOptions as TypeORMConnectionOptions} from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
-import { Memo } from './entity/Memo';
+import {Memo} from './entity/Memo';
 
 const host = '127.0.0.1';
 const port = 13307;

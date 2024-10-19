@@ -1,12 +1,14 @@
+import * as stream from 'node:stream';
 import * as bunyan from 'bunyan';
-import { mock, mockReset } from 'jest-mock-extended';
-import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
-import { BunyanAdaptor } from '../../src/logger/bunyan';
-import { allLoggerOptions, otherLoggerOptions } from '../LoggingOptions';
+import {mock, mockReset} from 'jest-mock-extended';
+import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+import {BunyanAdaptor} from '../../src/logger/bunyan';
+import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
 
-const mockRingBuffer = mock<bunyan.RingBuffer>();
+const mockStream = mock<stream.Writable>();
+
 beforeEach(() => {
-  mockReset(mockRingBuffer);
+  mockReset(mockStream);
 });
 
 const loggerName = 'test-logger';
@@ -15,16 +17,16 @@ describe('Each logger method', () => {
   const logger = bunyan.createLogger({
     name: loggerName,
     level: 'trace',
-    streams: [{ type: 'raw', stream: mockRingBuffer }],
+    streams: [{type: 'raw', stream: mockStream}],
   });
 
   describe('logQuery()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['query']];
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select 1');
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'Query',
         hostname: expect.any(String),
         level: bunyan.INFO,
@@ -36,10 +38,10 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select ?', [1]);
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'Query',
         hostname: expect.any(String),
         level: bunyan.INFO,
@@ -51,23 +53,23 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select 1');
 
-      expect(mockRingBuffer.write).not.toHaveBeenCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 
   describe('logQueryError()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['error']];
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
-        'select X from Y'
+        'select X from Y',
       );
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'QueryError',
         hostname: expect.any(String),
         level: bunyan.ERROR,
@@ -86,14 +88,14 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
         'select ? from Y',
-        [1]
+        [1],
       );
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'QueryError',
         hostname: expect.any(String),
         level: bunyan.ERROR,
@@ -112,23 +114,23 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
-        'select X from Y'
+        'select X from Y',
       );
 
-      expect(mockRingBuffer.write).not.toHaveBeenCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 
   describe('logQuerySlow()', () => {
     const enabledOptions: LoggerOptions[] = allLoggerOptions;
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQuerySlow(2000, 'select sleep(2)');
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'QuerySlow',
         hostname: expect.any(String),
         level: bunyan.WARN,
@@ -141,10 +143,10 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logQuerySlow(2000, 'select sleep(?)', [2]);
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'QuerySlow',
         hostname: expect.any(String),
         level: bunyan.WARN,
@@ -161,10 +163,10 @@ describe('Each logger method', () => {
   describe('logSchemaBuild()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['schema']];
 
-    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'SchemaBuild',
         hostname: expect.any(String),
         level: bunyan.DEBUG,
@@ -176,20 +178,20 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
-      expect(mockRingBuffer.write).not.toHaveBeenCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 
   describe('logMigration()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['migration']];
 
-    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', (loggerOptions) => {
+    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
-      expect(mockRingBuffer.write).toHaveBeenCalledWith({
+      expect(mockStream.write).toHaveBeenCalledWith({
         type: 'Migration',
         hostname: expect.any(String),
         level: bunyan.DEBUG,
@@ -201,10 +203,10 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
       new BunyanAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
-      expect(mockRingBuffer.write).not.toHaveBeenCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 });
@@ -213,7 +215,7 @@ describe('Customized logger methods', () => {
   const logger = bunyan.createLogger({
     name: loggerName,
     level: 'info',
-    streams: [{ type: 'raw', stream: mockRingBuffer }],
+    streams: [{type: 'raw', stream: mockStream}],
   });
 
   function invokeLoggerMethods(adaptor: BunyanAdaptor): void {
@@ -227,8 +229,8 @@ describe('Customized logger methods', () => {
   test('Default log level methods', () => {
     invokeLoggerMethods(new BunyanAdaptor(logger, 'all'));
 
-    expect(mockRingBuffer.write).toHaveBeenCalledTimes(3);
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(1, {
+    expect(mockStream.write).toHaveBeenCalledTimes(3);
+    expect(mockStream.write).toHaveBeenNthCalledWith(1, {
       type: 'Query',
       hostname: expect.any(String),
       level: bunyan.INFO,
@@ -238,7 +240,7 @@ describe('Customized logger methods', () => {
       time: expect.any(Date),
       v: 0,
     });
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(2, {
+    expect(mockStream.write).toHaveBeenNthCalledWith(2, {
       type: 'QueryError',
       hostname: expect.any(String),
       level: bunyan.ERROR,
@@ -249,7 +251,7 @@ describe('Customized logger methods', () => {
       time: expect.any(Date),
       v: 0,
     });
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(3, {
+    expect(mockStream.write).toHaveBeenNthCalledWith(3, {
       type: 'QuerySlow',
       hostname: expect.any(String),
       level: bunyan.WARN,
@@ -269,10 +271,10 @@ describe('Customized logger methods', () => {
         info: 'debug',
         warn: 'debug',
         error: 'debug',
-      })
+      }),
     );
 
-    expect(mockRingBuffer.write).not.toHaveBeenCalled();
+    expect(mockStream.write).not.toHaveBeenCalled();
   });
 
   test('INFO log level methods', () => {
@@ -284,11 +286,11 @@ describe('Customized logger methods', () => {
         error: 'info',
         query: 'info',
         queryError: 'info',
-      })
+      }),
     );
 
-    expect(mockRingBuffer.write).toHaveBeenCalledTimes(5);
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(1, {
+    expect(mockStream.write).toHaveBeenCalledTimes(5);
+    expect(mockStream.write).toHaveBeenNthCalledWith(1, {
       type: 'Query',
       hostname: expect.any(String),
       level: bunyan.INFO,
@@ -298,7 +300,7 @@ describe('Customized logger methods', () => {
       time: expect.any(Date),
       v: 0,
     });
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(2, {
+    expect(mockStream.write).toHaveBeenNthCalledWith(2, {
       type: 'QueryError',
       hostname: expect.any(String),
       level: bunyan.INFO,
@@ -309,7 +311,7 @@ describe('Customized logger methods', () => {
       time: expect.any(Date),
       v: 0,
     });
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(3, {
+    expect(mockStream.write).toHaveBeenNthCalledWith(3, {
       type: 'QuerySlow',
       hostname: expect.any(String),
       level: bunyan.INFO,
@@ -320,7 +322,7 @@ describe('Customized logger methods', () => {
       executionTime: 2000,
       v: 0,
     });
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(4, {
+    expect(mockStream.write).toHaveBeenNthCalledWith(4, {
       type: 'SchemaBuild',
       hostname: expect.any(String),
       level: bunyan.INFO,
@@ -330,7 +332,7 @@ describe('Customized logger methods', () => {
       time: expect.any(Date),
       v: 0,
     });
-    expect(mockRingBuffer.write).toHaveBeenNthCalledWith(5, {
+    expect(mockStream.write).toHaveBeenNthCalledWith(5, {
       type: 'Migration',
       hostname: expect.any(String),
       level: bunyan.INFO,

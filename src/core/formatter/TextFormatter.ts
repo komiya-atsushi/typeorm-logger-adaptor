@@ -1,6 +1,6 @@
-import { PlatformTools } from 'typeorm/platform/PlatformTools';
+import {PlatformTools} from 'typeorm/platform/PlatformTools';
 
-import { Formatter } from './Formatter';
+import {Formatter} from './Formatter';
 
 export class TextFormatter implements Formatter {
   constructor(private readonly highlightEnabled: boolean = false) {}

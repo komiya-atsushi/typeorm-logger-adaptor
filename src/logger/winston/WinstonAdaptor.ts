@@ -1,8 +1,8 @@
-import { LoggerOptions as TypeOrmLoggerOptions } from 'typeorm/logger/LoggerOptions';
-import { LeveledLogMethod, Logger as WinstonLogger } from 'winston';
+import {LoggerOptions as TypeOrmLoggerOptions} from 'typeorm/logger/LoggerOptions';
+import {LeveledLogMethod, Logger as WinstonLogger} from 'winston';
 
-import { LoggerMethods, TypeOrmLoggerBase } from '../../core/TypeOrmLoggerBase';
-import { TextFormatter } from '../../core/formatter/TextFormatter';
+import {LoggerMethods, TypeOrmLoggerBase} from '../../core/TypeOrmLoggerBase';
+import {TextFormatter} from '../../core/formatter/TextFormatter';
 
 export interface WinstonLoggerMethodMapping {
   log: LeveledLogMethod;
@@ -31,14 +31,14 @@ export class WinstonAdaptor extends TypeOrmLoggerBase {
     logger: WinstonLogger,
     options: TypeOrmLoggerOptions,
     highlightSqlEnabled = false,
-    loggerMethodMapping?: WinstonLoggerMethodMapping
+    loggerMethodMapping?: WinstonLoggerMethodMapping,
   ) {
     super(WinstonAdaptor.toLoggerMethods(logger, loggerMethodMapping), new TextFormatter(highlightSqlEnabled), options);
   }
 
   static toLoggerMethods(
     logger: WinstonLogger,
-    logLevelMapping: WinstonLoggerMethodMapping | undefined
+    logLevelMapping: WinstonLoggerMethodMapping | undefined,
   ): LoggerMethods {
     if (logLevelMapping === undefined) {
       // syslog levels do not have 'warn' level, so use 'warning' level instead
@@ -55,7 +55,7 @@ export class WinstonAdaptor extends TypeOrmLoggerBase {
       });
     }
 
-    const { log, info, warn, error, query, queryError, querySlow, schemaBuild, migration } = logLevelMapping;
+    const {log, info, warn, error, query, queryError, querySlow, schemaBuild, migration} = logLevelMapping;
     const result = this.createLoggerMethods({
       log: (first: unknown, ...rest: unknown[]) => log(first as string, ...rest),
       info: (first: unknown, ...rest: unknown[]) => info(first as string, ...rest),

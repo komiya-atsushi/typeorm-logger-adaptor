@@ -1,7 +1,7 @@
-import { createConnection } from 'typeorm';
+import {createConnection} from 'typeorm';
 import * as winston from 'winston';
-import { WinstonAdaptor } from '../dist/logger/winston';
-import { User } from './entity/User';
+import {WinstonAdaptor} from '../dist/logger/winston';
+import {User} from './entity/User';
 
 // Configure logger (Winston)
 const logger = winston.createLogger({
@@ -30,7 +30,7 @@ createConnection({
   migrationsRun: true,
   logger: new WinstonAdaptor(logger, 'all', true),
 })
-  .then(async (conn) => {
+  .then(async conn => {
     try {
       await conn.query('select 1');
       await conn.query('SELECT ___column_that_does_not_exist___ FROM ___table_that_does_not_exist___');
@@ -38,4 +38,4 @@ createConnection({
       await conn.close();
     }
   })
-  .catch((e) => e);
+  .catch(e => e);

@@ -1,4 +1,4 @@
-import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
+import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
 
 export const allLoggerOptions: LoggerOptions[] = [
   true,
@@ -14,6 +14,6 @@ export const allLoggerOptions: LoggerOptions[] = [
 ];
 
 export function otherLoggerOptions(optionsToExclude: LoggerOptions[]): LoggerOptions[] {
-  const set = new Set(optionsToExclude.map((elem) => elem.toString()));
-  return allLoggerOptions.filter((opt) => !set.has(opt.toString()));
+  const set = new Set(optionsToExclude.map(elem => elem.toString()));
+  return allLoggerOptions.filter(opt => !set.has(opt.toString()));
 }

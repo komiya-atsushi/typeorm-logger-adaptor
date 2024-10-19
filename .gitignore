@@ -1,5 +1,11 @@
 .idea/
 node_modules/
-coverage/
+
+# Compile & build
+build/
 dist/
+tsconfig*.tsbuildinfo
+
+# Test
+coverage/
 reports/

@@ -1,11 +1,11 @@
-import { mock, mockReset } from 'jest-mock-extended';
-import { DataSource } from 'typeorm';
-import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
-import { Logger } from 'winston';
+import {mock, mockReset} from 'jest-mock-extended';
+import {DataSource} from 'typeorm';
+import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+import {Logger} from 'winston';
 
-import { WinstonAdaptor } from '../src/logger/winston';
-import { typeORMConnectionOptions } from './ConnectionOptions';
-import { DatabaseFixture } from './DatabaseFixture';
+import {WinstonAdaptor} from '../src/logger/winston';
+import {typeORMConnectionOptions} from './ConnectionOptions';
+import {DatabaseFixture} from './DatabaseFixture';
 
 const database = 'test_winston';
 
@@ -25,7 +25,7 @@ beforeEach(async () => {
 
 async function run(
   loggerOptions: LoggerOptions,
-  fn: (mockLogger: Logger, conn: DataSource) => Promise<void>
+  fn: (mockLogger: Logger, conn: DataSource) => Promise<void>,
 ): Promise<void> {
   const mockLogger = mock<Logger>();
   const dataSource = new DataSource({
@@ -42,20 +42,20 @@ async function run(
 }
 
 test('LoggerOptions: all', async () => {
-  await run('all', async (mockLogger) => {
+  await run('all', async mockLogger => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
     expect(mockLogger.info).toHaveBeenCalledTimes(8);
     expect(mockLogger.info).toHaveBeenNthCalledWith(1, 'query: SELECT VERSION() AS `version`');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
       2,
-      'All classes found using provided glob pattern "test/migration/*.ts" : "test/migration/1600000000000-test.ts"'
+      'All classes found using provided glob pattern "test/migration/*.ts" : "test/migration/1600000000000-test.ts"',
     );
     expect(mockLogger.info).toHaveBeenNthCalledWith(3, 'query: START TRANSACTION');
     expect(mockLogger.info).toHaveBeenNthCalledWith(4, 'query: SELECT DATABASE() AS `db_name`');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
       7,
-      'query: CREATE TABLE `memo` (`id` int NOT NULL AUTO_INCREMENT, `memo` varchar(100) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB'
+      'query: CREATE TABLE `memo` (`id` int NOT NULL AUTO_INCREMENT, `memo` varchar(100) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB',
     );
     expect(mockLogger.info).toHaveBeenNthCalledWith(8, 'query: COMMIT');
 
@@ -81,7 +81,7 @@ test('LoggerOptions: query', async () => {
 });
 
 test('LoggerOptions: schema', async () => {
-  await run(['schema'], async (mockLogger) => {
+  await run(['schema'], async mockLogger => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
@@ -107,13 +107,13 @@ test('LoggerOptions: migration', async () => {
       expect(mockLogger.debug).toHaveBeenNthCalledWith(3, '1 migrations are new migrations must be executed.');
       expect(mockLogger.debug).toHaveBeenNthCalledWith(
         4,
-        'Migration Test1600000000000 has been  executed successfully.'
+        'Migration Test1600000000000 has been  executed successfully.',
       );
 
       expect(mockLogger.info).toHaveBeenCalledTimes(0);
       expect(mockLogger.warn).toHaveBeenCalledTimes(0);
       expect(mockLogger.error).toHaveBeenCalledTimes(0);
-    }
+    },
   );
 });
 
@@ -121,7 +121,9 @@ test('LoggerOptions: error', async () => {
   await run(['error'], async (mockLogger, conn) => {
     try {
       await conn.query('select col from foo');
-    } catch (e) {}
+    } catch (e) {
+      // ignore
+    }
 
     expect(mockLogger.error).toHaveBeenCalledWith('query failed: select col from foo', expect.any(Error));
 
@@ -136,7 +138,7 @@ test('Slow query', async () => {
     await conn.query('select sleep(1)');
 
     expect(mockLogger.warn).toHaveBeenCalledWith(
-      expect.stringMatching(/query is slow: execution time = \d+, query = select sleep\(1\)/)
+      expect.stringMatching(/query is slow: execution time = \d+, query = select sleep\(1\)/),
     );
 
     expect(mockLogger.info).toHaveBeenCalledTimes(0);

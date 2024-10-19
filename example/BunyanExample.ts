@@ -1,11 +1,11 @@
-import { createLogger } from 'bunyan';
-import { createConnection } from 'typeorm';
+import {createLogger} from 'bunyan';
+import {createConnection} from 'typeorm';
 
-import { BunyanAdaptor } from '../dist/logger/bunyan';
-import { User } from './entity/User';
+import {BunyanAdaptor} from '../dist/logger/bunyan';
+import {User} from './entity/User';
 
 // Configure logger (Bunyan)
-const logger = createLogger({ name: 'typeorm-logger-adaptor-bunyan-example', level: 'debug' });
+const logger = createLogger({name: 'typeorm-logger-adaptor-bunyan-example', level: 'debug'});
 
 const host = '127.0.0.1';
 const port = 13307;
@@ -27,7 +27,7 @@ createConnection({
   migrationsRun: true,
   logger: new BunyanAdaptor(logger, 'all'),
 })
-  .then(async (conn) => {
+  .then(async conn => {
     try {
       await conn.query('select 1');
       await conn.query('SELECT ___column_that_does_not_exist___ FROM ___table_that_does_not_exist___');
@@ -35,4 +35,4 @@ createConnection({
       await conn.close();
     }
   })
-  .catch((e) => e);
+  .catch(e => e);

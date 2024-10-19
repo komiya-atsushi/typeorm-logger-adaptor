@@ -1,6 +1,6 @@
-import { Connection as MySQLConnection, createConnection as createMySQLConnection } from 'mysql2/promise';
+import {Connection as MySQLConnection, createConnection as createMySQLConnection} from 'mysql2/promise';
 
-import { mysqlConnectionOptions } from './ConnectionOptions';
+import {mysqlConnectionOptions} from './ConnectionOptions';
 
 async function createMySQLConnectionWithRetry(maxRetries = 5): Promise<MySQLConnection> {
   for (let i = 1; i <= maxRetries; i++) {
@@ -9,10 +9,10 @@ async function createMySQLConnectionWithRetry(maxRetries = 5): Promise<MySQLConn
     } catch (e) {
       const sleepMs = Math.pow(2, i) * 1000;
       console.info(`Failed to connect MySQL (#${i}th trial). Sleep ${sleepMs}ms.`);
-      await new Promise((resolve) => setTimeout(resolve, sleepMs));
+      await new Promise(resolve => setTimeout(resolve, sleepMs));
     }
   }
-  throw new Error(`Can't connect MySQL server.`);
+  throw new Error("Can't connect MySQL server.");
 }
 
 export class DatabaseFixture {
