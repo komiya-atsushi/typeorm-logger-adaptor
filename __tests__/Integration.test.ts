@@ -1,5 +1,5 @@
 import { mock, mockReset } from 'jest-mock-extended';
-import { createConnection, Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
 import { Logger } from 'winston';
 
@@ -25,19 +25,19 @@ beforeEach(async () => {
 
 async function run(
   loggerOptions: LoggerOptions,
-  fn: (mockLogger: Logger, conn: Connection) => Promise<void>
+  fn: (mockLogger: Logger, conn: DataSource) => Promise<void>
 ): Promise<void> {
   const mockLogger = mock<Logger>();
-  const conn = await createConnection({
+  const dataSource = new DataSource({
     ...typeORMConnectionOptions,
     database,
     logger: new WinstonAdaptor(mockLogger, loggerOptions),
   });
 
   try {
-    await fn(mockLogger, conn);
+    await fn(mockLogger, await dataSource.initialize());
   } finally {
-    await conn.close();
+    await dataSource.destroy();
   }
 }
 
@@ -45,27 +45,28 @@ test('LoggerOptions: all', async () => {
   await run('all', async (mockLogger) => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
-    expect(mockLogger.info).toBeCalledTimes(7);
+    expect(mockLogger.info).toHaveBeenCalledTimes(8);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, 'query: SELECT VERSION() AS `version`');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
-      1,
+      2,
       'All classes found using provided glob pattern "__tests__/migration/*.ts" : "__tests__/migration/1600000000000-test.ts"'
     );
-    expect(mockLogger.info).toHaveBeenNthCalledWith(2, 'query: START TRANSACTION');
-    expect(mockLogger.info).toHaveBeenNthCalledWith(3, 'query: SELECT DATABASE() AS `db_name`');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(3, 'query: START TRANSACTION');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(4, 'query: SELECT DATABASE() AS `db_name`');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
-      6,
+      7,
       'query: CREATE TABLE `memo` (`id` int NOT NULL AUTO_INCREMENT, `memo` varchar(100) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB'
     );
-    expect(mockLogger.info).toHaveBeenNthCalledWith(7, 'query: COMMIT');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(8, 'query: COMMIT');
 
-    expect(mockLogger.warn).toBeCalledTimes(0);
-    expect(mockLogger.error).toBeCalledTimes(0);
+    expect(mockLogger.warn).toHaveBeenCalledTimes(0);
+    expect(mockLogger.error).toHaveBeenCalledTimes(0);
   });
 });
 
 test('LoggerOptions: query', async () => {
   await run(['query'], async (mockLogger, conn) => {
-    expect(mockLogger.info).toBeCalledTimes(6);
+    expect(mockLogger.info).toHaveBeenCalledTimes(7);
 
     mockReset(mockLogger);
 
@@ -73,9 +74,9 @@ test('LoggerOptions: query', async () => {
 
     expect(mockLogger.info).toHaveBeenCalledWith('query: select 1');
 
-    expect(mockLogger.debug).toBeCalledTimes(0);
-    expect(mockLogger.warn).toBeCalledTimes(0);
-    expect(mockLogger.error).toBeCalledTimes(0);
+    expect(mockLogger.debug).toHaveBeenCalledTimes(0);
+    expect(mockLogger.warn).toHaveBeenCalledTimes(0);
+    expect(mockLogger.error).toHaveBeenCalledTimes(0);
   });
 });
 
@@ -83,9 +84,9 @@ test('LoggerOptions: schema', async () => {
   await run(['schema'], async (mockLogger) => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
-    expect(mockLogger.info).toBeCalledTimes(0);
-    expect(mockLogger.warn).toBeCalledTimes(0);
-    expect(mockLogger.error).toBeCalledTimes(0);
+    expect(mockLogger.info).toHaveBeenCalledTimes(0);
+    expect(mockLogger.warn).toHaveBeenCalledTimes(0);
+    expect(mockLogger.error).toHaveBeenCalledTimes(0);
   });
 });
 
@@ -100,18 +101,18 @@ test('LoggerOptions: migration', async () => {
 
       await conn.runMigrations();
 
-      expect(mockLogger.debug).toBeCalledTimes(4);
+      expect(mockLogger.debug).toHaveBeenCalledTimes(4);
       expect(mockLogger.debug).toHaveBeenNthCalledWith(1, '0 migrations are already loaded in the database.');
       expect(mockLogger.debug).toHaveBeenNthCalledWith(2, '1 migrations were found in the source code.');
       expect(mockLogger.debug).toHaveBeenNthCalledWith(3, '1 migrations are new migrations must be executed.');
       expect(mockLogger.debug).toHaveBeenNthCalledWith(
         4,
-        'Migration Test1600000000000 has been executed successfully.'
+        'Migration Test1600000000000 has been  executed successfully.'
       );
 
-      expect(mockLogger.info).toBeCalledTimes(0);
-      expect(mockLogger.warn).toBeCalledTimes(0);
-      expect(mockLogger.error).toBeCalledTimes(0);
+      expect(mockLogger.info).toHaveBeenCalledTimes(0);
+      expect(mockLogger.warn).toHaveBeenCalledTimes(0);
+      expect(mockLogger.error).toHaveBeenCalledTimes(0);
     }
   );
 });
@@ -124,9 +125,9 @@ test('LoggerOptions: error', async () => {
 
     expect(mockLogger.error).toHaveBeenCalledWith('query failed: select col from foo', expect.any(Error));
 
-    expect(mockLogger.info).toBeCalledTimes(0);
-    expect(mockLogger.debug).toBeCalledTimes(0);
-    expect(mockLogger.warn).toBeCalledTimes(0);
+    expect(mockLogger.info).toHaveBeenCalledTimes(0);
+    expect(mockLogger.debug).toHaveBeenCalledTimes(0);
+    expect(mockLogger.warn).toHaveBeenCalledTimes(0);
   });
 });
 
@@ -138,8 +139,8 @@ test('Slow query', async () => {
       expect.stringMatching(/query is slow: execution time = \d+, query = select sleep\(1\)/)
     );
 
-    expect(mockLogger.info).toBeCalledTimes(0);
-    expect(mockLogger.debug).toBeCalledTimes(0);
-    expect(mockLogger.error).toBeCalledTimes(0);
+    expect(mockLogger.info).toHaveBeenCalledTimes(0);
+    expect(mockLogger.debug).toHaveBeenCalledTimes(0);
+    expect(mockLogger.error).toHaveBeenCalledTimes(0);
   });
 });

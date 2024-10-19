@@ -54,7 +54,7 @@ describe('Each logger method', () => {
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select 1');
 
-      expect(mockRingBuffer.write).not.toBeCalled();
+      expect(mockRingBuffer.write).not.toHaveBeenCalled();
     });
   });
 
@@ -118,7 +118,7 @@ describe('Each logger method', () => {
         'select X from Y'
       );
 
-      expect(mockRingBuffer.write).not.toBeCalled();
+      expect(mockRingBuffer.write).not.toHaveBeenCalled();
     });
   });
 
@@ -179,7 +179,7 @@ describe('Each logger method', () => {
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
-      expect(mockRingBuffer.write).not.toBeCalled();
+      expect(mockRingBuffer.write).not.toHaveBeenCalled();
     });
   });
 
@@ -204,7 +204,7 @@ describe('Each logger method', () => {
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
-      expect(mockRingBuffer.write).not.toBeCalled();
+      expect(mockRingBuffer.write).not.toHaveBeenCalled();
     });
   });
 });
@@ -227,7 +227,7 @@ describe('Customized logger methods', () => {
   test('Default log level methods', () => {
     invokeLoggerMethods(new BunyanAdaptor(logger, 'all'));
 
-    expect(mockRingBuffer.write).toBeCalledTimes(3);
+    expect(mockRingBuffer.write).toHaveBeenCalledTimes(3);
     expect(mockRingBuffer.write).toHaveBeenNthCalledWith(1, {
       type: 'Query',
       hostname: expect.any(String),
@@ -272,7 +272,7 @@ describe('Customized logger methods', () => {
       })
     );
 
-    expect(mockRingBuffer.write).not.toBeCalled();
+    expect(mockRingBuffer.write).not.toHaveBeenCalled();
   });
 
   test('INFO log level methods', () => {
@@ -287,7 +287,7 @@ describe('Customized logger methods', () => {
       })
     );
 
-    expect(mockRingBuffer.write).toBeCalledTimes(5);
+    expect(mockRingBuffer.write).toHaveBeenCalledTimes(5);
     expect(mockRingBuffer.write).toHaveBeenNthCalledWith(1, {
       type: 'Query',
       hostname: expect.any(String),

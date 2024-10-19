@@ -34,7 +34,7 @@ describe('Each logger method', () => {
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQuery('select 1');
 
-      expect(mockStream.write).not.toBeCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 
@@ -66,7 +66,7 @@ describe('Each logger method', () => {
         'select X from Y'
       );
 
-      expect(mockStream.write).not.toBeCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 
@@ -102,7 +102,7 @@ describe('Each logger method', () => {
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
-      expect(mockStream.write).not.toBeCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 
@@ -118,7 +118,7 @@ describe('Each logger method', () => {
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
-      expect(mockStream.write).not.toBeCalled();
+      expect(mockStream.write).not.toHaveBeenCalled();
     });
   });
 });
@@ -141,7 +141,7 @@ describe('Customized logger methods', () => {
   test('Default log level methods', () => {
     invokeLoggerMethods(new WinstonAdaptor(logger, 'all'));
 
-    expect(mockStream.write).toBeCalledTimes(3);
+    expect(mockStream.write).toHaveBeenCalledTimes(3);
     expect(mockStream.write).toHaveBeenNthCalledWith(1, 'info: query: select 1\n');
     expect(mockStream.write).toHaveBeenNthCalledWith(2, 'error: query failed: select X from Y\n');
     expect(mockStream.write).toHaveBeenNthCalledWith(
@@ -160,7 +160,7 @@ describe('Customized logger methods', () => {
       })
     );
 
-    expect(mockStream.write).not.toBeCalled();
+    expect(mockStream.write).not.toHaveBeenCalled();
   });
 
   test('INFO log level methods', () => {
@@ -175,7 +175,7 @@ describe('Customized logger methods', () => {
       })
     );
 
-    expect(mockStream.write).toBeCalledTimes(5);
+    expect(mockStream.write).toHaveBeenCalledTimes(5);
     expect(mockStream.write).toHaveBeenNthCalledWith(1, 'info: query: select 1\n');
     expect(mockStream.write).toHaveBeenNthCalledWith(2, 'info: query failed: select X from Y\n');
     expect(mockStream.write).toHaveBeenNthCalledWith(
