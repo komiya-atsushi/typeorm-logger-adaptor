@@ -13,7 +13,6 @@
   "bugs": {
     "url": "https://github.com/komiya-atsushi/typeorm-logger-adaptor/issues"
   },
-  "main": "./index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "compile": "tsc --noEmit",
@@ -57,5 +56,33 @@
   },
   "files": [
     "dist/**/*"
-  ]
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./logger/bunyan": "./dist/logger/bunyan/index.js",
+    "./logger/winston": "./dist/logger/winston/index.js",
+    "./bunyan": "./dist/logger/bunyan/index.js",
+    "./winston": "./dist/logger/winston/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "logger/bunyan": [
+        "dist/logger/bunyan/"
+      ],
+      "logger/winston": [
+        "dist/logger/winston/"
+      ],
+      "bunyan": [
+        "dist/logger/bunyan/"
+      ],
+      "winston": [
+        "dist/logger/winston/"
+      ]
+    }
+  }
 }
