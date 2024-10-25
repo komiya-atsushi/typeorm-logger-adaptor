@@ -1,0 +1,30 @@
+{
+  "name": "typeorm-logger-adaptor",
+  "version": "1.1.0",
+  "description": "Logger adaptors for TypeORM",
+  "author": {
+    "name": "KOMIYA Atsushi",
+    "url": "https://github.com/komiya-atsushi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/komiya-atsushi/typeorm-logger-adaptor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/komiya-atsushi/typeorm-logger-adaptor/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "typescript",
+    "typeorm",
+    "logger",
+    "winston",
+    "bunyan"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {},
+  "peerDependencies": {},
+  "scripts": {}
+}

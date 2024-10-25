@@ -1,5 +1,5 @@
 {
-  "name": "typeorm-logger-adaptor",
+  "name": "typeorm-logger-adaptor-root",
   "version": "1.1.0",
   "description": "Logger adaptors for TypeORM",
   "author": {
@@ -84,5 +84,8 @@
         "dist/logger/winston/"
       ]
     }
-  }
+  },
+  "workspaces": [
+    "packages/typeorm-logger-adaptor"
+  ]
 }
