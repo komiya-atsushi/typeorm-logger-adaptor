@@ -46,6 +46,7 @@
     "node": ">=18"
   },
   "workspaces": [
-    "packages/typeorm-logger-adaptor"
+    "packages/typeorm-logger-adaptor",
+    "packages/typeorm-logger-adaptor-test"
   ]
 }
