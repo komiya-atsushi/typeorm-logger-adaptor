@@ -3,7 +3,7 @@
   "overrides": [
     {
       "files": [
-        "dist/**/*.js"
+        "packages/typeorm-logger-adaptor/dist/**/*.js"
       ],
       "rules": {
         "n/no-unpublished-require": "error",

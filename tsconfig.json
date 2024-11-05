@@ -3,18 +3,7 @@
   "compilerOptions": {
     "composite": false,
     "declaration": true,
-    "esModuleInterop": true,
     "lib": ["ES2023"],
     "target": "ES2022",
-    "rootDir": ".",
-    "outDir": "build",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false
-  },
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts",
-    "example/**/*.ts"
-  ]
+  }
 }

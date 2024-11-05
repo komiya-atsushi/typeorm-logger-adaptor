@@ -24,7 +24,48 @@
   "engines": {
     "node": ">=18"
   },
-  "devDependencies": {},
-  "peerDependencies": {},
-  "scripts": {}
+  "devDependencies": {
+    "@types/bunyan": "^1.8.6",
+    "bunyan": "^1.8.5",
+    "typeorm": "^0.3.0",
+    "winston": "^3.0.0"
+  },
+  "peerDependencies": {
+    "bunyan": "^1.8.5",
+    "typeorm": ">=0.2.0 <0.4.0",
+    "winston": "^3.0.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./logger/bunyan": "./dist/logger/bunyan/index.js",
+    "./logger/winston": "./dist/logger/winston/index.js",
+    "./bunyan": "./dist/logger/bunyan/index.js",
+    "./winston": "./dist/logger/winston/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "logger/bunyan": [
+        "dist/logger/bunyan/"
+      ],
+      "logger/winston": [
+        "dist/logger/winston/"
+      ],
+      "bunyan": [
+        "dist/logger/bunyan/"
+      ],
+      "winston": [
+        "dist/logger/winston/"
+      ]
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "compile": "tsc --noEmit"
+  }
 }

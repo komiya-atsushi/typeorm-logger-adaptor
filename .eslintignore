@@ -1,2 +1,2 @@
 build/
-dist/**/*.d.ts
+packages/typeorm-logger-adaptor/dist/**/*.d.ts
