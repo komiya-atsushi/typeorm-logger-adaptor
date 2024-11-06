@@ -5,7 +5,14 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "bunyan": "^1.8.5",
+    "typeorm": "^0.3.0",
+    "typeorm-logger-adaptor": "^1.1.0",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/bunyan": "^1.8.6"
+  },
   "scripts": {}
 }
