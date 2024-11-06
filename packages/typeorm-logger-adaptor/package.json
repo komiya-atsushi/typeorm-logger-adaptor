@@ -66,6 +66,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "compile": "tsc --noEmit"
+    "test": "npm run test:compile && npm run test:attw",
+    "test:compile": "tsc --noEmit",
+    "test:attw": "attw --pack .",
+    "pretest:attw": "npm run build"
   }
 }
