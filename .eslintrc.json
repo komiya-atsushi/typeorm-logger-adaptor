@@ -36,6 +36,14 @@
               "order": "asc"
             }
           }
+        ],
+        "n/no-extraneous-import": [
+          "error",
+          {
+            "allowModules": [
+              "jest-mock-extended"
+            ]
+          }
         ]
       }
     }

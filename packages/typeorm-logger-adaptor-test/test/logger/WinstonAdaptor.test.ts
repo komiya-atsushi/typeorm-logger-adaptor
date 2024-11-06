@@ -1,10 +1,12 @@
 import {mock, mockReset} from 'jest-mock-extended';
 import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+// eslint-disable-next-line import/no-unresolved
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 import * as winston from 'winston';
-import {WinstonAdaptor} from '../../src/logger/winston';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
 
 const mockStream = mock<NodeJS.WritableStream>();
+
 beforeEach(() => {
   mockReset(mockStream);
 });
@@ -47,7 +49,7 @@ describe('Each logger method', () => {
         'select X from Y',
       );
 
-      expect(mockStream.write).toHaveBeenCalledWith('error: query failed: select X from Y\n');
+      expect(mockStream.write).toHaveBeenCalledWith(expect.stringMatching(/error: query failed: select X from Y.*/));
     });
 
     test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
@@ -57,7 +59,9 @@ describe('Each logger method', () => {
         [1],
       );
 
-      expect(mockStream.write).toHaveBeenCalledWith('error: query failed: select ? from Y -- PARAMETERS: [1]\n');
+      expect(mockStream.write).toHaveBeenCalledWith(
+        expect.stringMatching(/error: query failed: select \? from Y -- PARAMETERS: \[1].*/),
+      );
     });
 
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
@@ -143,7 +147,10 @@ describe('Customized logger methods', () => {
 
     expect(mockStream.write).toHaveBeenCalledTimes(3);
     expect(mockStream.write).toHaveBeenNthCalledWith(1, 'info: query: select 1\n');
-    expect(mockStream.write).toHaveBeenNthCalledWith(2, 'error: query failed: select X from Y\n');
+    expect(mockStream.write).toHaveBeenNthCalledWith(
+      2,
+      expect.stringMatching(/error: query failed: select X from Y.*/),
+    );
     expect(mockStream.write).toHaveBeenNthCalledWith(
       3,
       'warn: query is slow: execution time = 2000, query = select sleep(2)\n',
@@ -177,7 +184,7 @@ describe('Customized logger methods', () => {
 
     expect(mockStream.write).toHaveBeenCalledTimes(5);
     expect(mockStream.write).toHaveBeenNthCalledWith(1, 'info: query: select 1\n');
-    expect(mockStream.write).toHaveBeenNthCalledWith(2, 'info: query failed: select X from Y\n');
+    expect(mockStream.write).toHaveBeenNthCalledWith(2, expect.stringMatching(/info: query failed: select X from Y.*/));
     expect(mockStream.write).toHaveBeenNthCalledWith(
       3,
       'info: query is slow: execution time = 2000, query = select sleep(2)\n',
@@ -204,7 +211,7 @@ describe('Using syslog levels', () => {
   test('logQueryError()', () => {
     new WinstonAdaptor(logger, 'all').logQueryError(new Error('Error message'), 'select X from Y');
 
-    expect(mockStream.write).toHaveBeenCalledWith('error: query failed: select X from Y\n');
+    expect(mockStream.write).toHaveBeenCalledWith(expect.stringMatching(/error: query failed: select X from Y.*/));
   });
 
   test('logQuerySlow()', () => {

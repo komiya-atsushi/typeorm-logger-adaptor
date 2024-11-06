@@ -1,9 +1,10 @@
 import {mock, mockReset} from 'jest-mock-extended';
 import {DataSource} from 'typeorm';
 import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+// eslint-disable-next-line import/no-unresolved
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 import {Logger} from 'winston';
 
-import {WinstonAdaptor} from '../src/logger/winston';
 import {typeORMConnectionOptions} from './ConnectionOptions';
 import {DatabaseFixture} from './DatabaseFixture';
 

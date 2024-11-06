@@ -2,7 +2,8 @@ import * as stream from 'node:stream';
 import * as bunyan from 'bunyan';
 import {mock, mockReset} from 'jest-mock-extended';
 import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
-import {BunyanAdaptor} from '../../src/logger/bunyan';
+// eslint-disable-next-line import/no-unresolved
+import {BunyanAdaptor} from 'typeorm-logger-adaptor/logger/bunyan';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
 
 const mockStream = mock<stream.Writable>();
