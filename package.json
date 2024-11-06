@@ -44,6 +44,7 @@
   },
   "workspaces": [
     "packages/typeorm-logger-adaptor",
-    "packages/typeorm-logger-adaptor-test"
+    "packages/typeorm-logger-adaptor-test",
+    "packages/example"
   ]
 }
