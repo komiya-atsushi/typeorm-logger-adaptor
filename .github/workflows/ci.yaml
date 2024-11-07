@@ -7,65 +7,37 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14.x
+          node-version: '18.x'
+          cache: 'npm'
 
-      - name: Cache node modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-${{ env.cache-name }}-
-            ${{ runner.os }}-node-modules-
-            ${{ runner.os }}-
+      - run: npm ci
 
-      - run: npm install
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      - run: npm -w packages/typeorm-logger-adaptor run build
+      - run: npm run lint
 
-      - name: Run test
-        run: npm run test:ci
+      - run: npm run test
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: test-results
-          path: __tests__/__results__/jest-junit.xml
+          path: packages/typeorm-logger-adaptor-test/reports/jest-junit.xml
 
-  lint:
+  test-package-import:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14.x
+          node-version: '18.x'
+          cache: 'npm'
 
-      - name: Cache node modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-${{ env.cache-name }}-
-            ${{ runner.os }}-node-modules-
-            ${{ runner.os }}-
+      - run: npm ci
 
-      - run: npm install
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-
-      - run: npm run build
-
-      - run: npm run lint
+      - run: packages/package-import-test/test.sh
