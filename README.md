@@ -36,43 +36,39 @@ Example
 -------
 
 ```typescript
-import { createConnection } from 'typeorm';
+import {DataSource} from 'typeorm';
 import * as winston from 'winston';
-import { WinstonAdaptor } from 'typeorm-logger-adaptor/logger/winston';
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 
-// Configure logger (Winston)
-const logger = winston.createLogger({
-  level: 'debug',
-  format: winston.format.cli(),
-  transports: [new winston.transports.Console()],
-});
+async function example(): Promise<void> {
+  // Configure logger (Winston)
+  const logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.cli(),
+    transports: [new winston.transports.Console()],
+  });
 
-const host = 'host';
-const port = 3306;
-const username = 'conn_user';
-const password = 'conn_user_pw';
-const database = 'db_name';
+  // Create and initialize DataSource
+  const dataSource = await new DataSource({
+    type: 'mysql',
+    host: 'database-host',
+    port: 3306,
+    username: 'conn_user',
+    password: 'conn_user_pw',
+    database: 'database_name',
+    // Use logger adaptor like this
+    logger: new WinstonAdaptor(logger, 'all', true),
+  }).initialize();
 
-// Configure connection
-createConnection({
-  type: 'mysql',
-  host,
-  port,
-  username,
-  password,
-  database,
-  synchronize: true,
-  migrationsRun: true,
-  logger: new WinstonAdaptor(logger, 'all'),
-})
-  .then(async (conn) => {
-    try {
-      await conn.query('select 1');
-    } finally {
-      await conn.close();
-    }
-  })
-  .catch((e) => console.error(e));
+  try {
+    await dataSource.synchronize();
+    await dataSource.runMigrations();
+    await dataSource.query('SELECT count(1) FROM user WHERE name = ?', ['Taro']);
+    await dataSource.query('SELECT ___column_that_does_not_exist___ FROM ___table_that_does_not_exist___');
+  } finally {
+    await dataSource.destroy();
+  }
+}
 ```
 
 License
