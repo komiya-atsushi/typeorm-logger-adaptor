@@ -1,0 +1,28 @@
+services:
+  mysql-service:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: test
+      MYSQL_INITDB_SKIP_TZINFO: y
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ptest"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  test-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    networks:
+      - default
+    depends_on:
+      mysql-service:
+        condition: service_healthy
+
+networks:
+  default:

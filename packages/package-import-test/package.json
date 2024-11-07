@@ -1,0 +1,17 @@
+{
+  "name": "package-import-test",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "mysql2": "^3.11.4",
+    "ts-node": "^10.9.2",
+    "typeorm": "^0.3.0",
+    "winston": "^3.0.0"
+  },
+  "scripts": {
+    "test": "ts-node src/index.ts"
+  }
+}
