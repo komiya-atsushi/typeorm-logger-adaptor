@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.0 / 2024-11-09
+
+- *No functional changes in production code.*
+- Introduce npm workspaces.
+- Introduce gts for linting and formatting.
+- Reduce devDependencies.
+- Stop using Gulp for packaging.
+
 ## v1.1.0 / 2022-03-24
 
 - Bump typeorm dependency to ^0.3.0 to support new breaking version
