@@ -1,0 +1,75 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_element:
+        description: 'Semver element will be incremented'
+        required: true
+        default: patch
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          registry-url: 'https://registry.npmjs.org'
+
+#      - name: Verify npmjs access token (this step will fail if the token has expired)
+#        run: npm whoami
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Bump version
+        run: |
+          npm version ${{ inputs.target_element }} \
+            --include-workspace-root \
+            --no-git-tag-version \
+            -w packages/typeorm-logger-adaptor
+
+      - name: Get version string
+        id: get-version-string
+        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and tag
+        run: |
+          git add \
+            package.json \
+            package-lock.json \
+            packages/typeorm-logger-adaptor/package.json
+          git commit -m "v${{ steps.get-version-string.outputs.version }}"
+          git tag "v${{ steps.get-version-string.outputs.version }}"
+
+      - name: Build
+        run: |
+          npm ci
+          npm -w packages/typeorm-logger-adaptor run build
+          cp README.md LICENSE CHANGELOG.md packages/typeorm-logger-adaptor/
+
+      - name: Publish
+        run: npm -w packages/typeorm-logger-adaptor publish --dry-run
+#        run: npm -w packages/typeorm-logger-adaptor publish --provenance --access public
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+#      - name: Push commits and tag
+#        run: |
+#          git push
+#          git push origin "v${{ steps.get-version-string.outputs.version }}"
