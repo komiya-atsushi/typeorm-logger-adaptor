@@ -27,10 +27,10 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
 
-#      - name: Verify npmjs access token (this step will fail if the token has expired)
-#        run: npm whoami
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Verify npmjs access token (this step will fail if the token has expired)
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Configure git
         run: |
@@ -64,12 +64,11 @@ jobs:
           cp README.md LICENSE CHANGELOG.md packages/typeorm-logger-adaptor/
 
       - name: Publish
-        run: npm -w packages/typeorm-logger-adaptor publish --dry-run
-#        run: npm -w packages/typeorm-logger-adaptor publish --provenance --access public
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm -w packages/typeorm-logger-adaptor publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-#      - name: Push commits and tag
-#        run: |
-#          git push
-#          git push origin "v${{ steps.get-version-string.outputs.version }}"
+      - name: Push commits and tag
+        run: |
+          git push
+          git push origin "v${{ steps.get-version-string.outputs.version }}"
