@@ -1,9 +1,6 @@
 {
-  "extends": "./node_modules/gts/tsconfig-google.json",
+  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
-    "composite": false,
-    "declaration": true,
-    "lib": ["ES2023"],
-    "target": "ES2022",
+    "declaration": true
   }
 }

@@ -29,6 +29,7 @@
   "license": "MIT",
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
+    "@tsconfig/node22": "^22.0.2",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.7.5",
     "eslint-plugin-import": "^2.31.0",
