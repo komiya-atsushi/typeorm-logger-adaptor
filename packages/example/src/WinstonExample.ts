@@ -36,4 +36,4 @@ async function main(): Promise<void> {
 
 main()
   .then(() => {})
-  .catch(e => console.error(e));
+  .catch((e) => console.error(e));

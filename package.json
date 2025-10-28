@@ -14,6 +14,7 @@
     "url": "https://github.com/komiya-atsushi/typeorm-logger-adaptor/issues"
   },
   "scripts": {
+    "biome": "npx @biomejs/biome check --write",
     "lint": "gts lint",
     "test": "npm run --workspaces test --if-present",
     "clean": "npm run --workspaces clean --if-present",
@@ -29,6 +30,7 @@
   "license": "MIT",
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
+    "@biomejs/biome": "2.3.1",
     "@tsconfig/node22": "^22.0.2",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.7.5",

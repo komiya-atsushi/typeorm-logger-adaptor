@@ -45,6 +45,6 @@ async function main(): Promise<void> {
 
 main()
   .then(() => {})
-  .catch(e => {
+  .catch((e) => {
     throw e;
   });

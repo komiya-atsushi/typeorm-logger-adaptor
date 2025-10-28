@@ -1,7 +1,7 @@
-import {QueryRunner} from 'typeorm';
-import {Logger} from 'typeorm/logger/Logger';
-import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
-import {Formatter} from './formatter/Formatter';
+import type {QueryRunner} from 'typeorm';
+import type {Logger} from 'typeorm/logger/Logger';
+import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+import type {Formatter} from './formatter/Formatter';
 
 export type LoggerMethod = (first: unknown, ...rest: unknown[]) => void;
 
@@ -44,8 +44,9 @@ export abstract class TypeOrmLoggerBase implements Logger {
   ) {
     this.loggerMethods = Object.assign(loggerMethods);
 
-    const array: ('query' | 'schema' | 'error' | 'warn' | 'info' | 'log' | 'migration')[] =
-      options instanceof Array ? options : [];
+    const array: ('query' | 'schema' | 'error' | 'warn' | 'info' | 'log' | 'migration')[] = Array.isArray(options)
+      ? options
+      : [];
 
     if (options !== 'all' && options !== true) {
       if (!array.includes('query')) {
@@ -93,8 +94,8 @@ export abstract class TypeOrmLoggerBase implements Logger {
     return result;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
+  logQuery(query: string, parameters?: any[], _queryRunner?: QueryRunner): any {
     this._logQuery(query, parameters);
   }
 
@@ -102,8 +103,8 @@ export abstract class TypeOrmLoggerBase implements Logger {
     this.loggerMethods.query(this.formatter.formatQuery(query, parameters));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  logQueryError(error: string | Error, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
+  logQueryError(error: string | Error, query: string, parameters?: any[], _queryRunner?: QueryRunner): any {
     this._logQueryError(error, query, parameters);
   }
 
@@ -111,8 +112,8 @@ export abstract class TypeOrmLoggerBase implements Logger {
     this.loggerMethods.queryError(this.formatter.formatQueryError(error, query, parameters), error);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+  // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
+  logQuerySlow(time: number, query: string, parameters?: any[], _queryRunner?: QueryRunner): any {
     this._logQuerySlow(time, query, parameters);
   }
 
@@ -120,8 +121,8 @@ export abstract class TypeOrmLoggerBase implements Logger {
     this.loggerMethods.querySlow(this.formatter.formatQuerySlow(time, query, parameters));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  logSchemaBuild(message: string, queryRunner?: QueryRunner): any {
+  // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
+  logSchemaBuild(message: string, _queryRunner?: QueryRunner): any {
     this._logSchemaBuild(message);
   }
 
@@ -129,8 +130,8 @@ export abstract class TypeOrmLoggerBase implements Logger {
     this.loggerMethods.schemaBuild(message);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  logMigration(message: string, queryRunner?: QueryRunner): any {
+  // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
+  logMigration(message: string, _queryRunner?: QueryRunner): any {
     this._logMigration(message);
   }
 
@@ -138,8 +139,8 @@ export abstract class TypeOrmLoggerBase implements Logger {
     this.loggerMethods.migration(message);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  log(level: 'log' | 'info' | 'warn', message: any, queryRunner?: QueryRunner): any {
+  // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
+  log(level: 'log' | 'info' | 'warn', message: any, _queryRunner?: QueryRunner): any {
     this.loggerMethods[level](message);
   }
 }

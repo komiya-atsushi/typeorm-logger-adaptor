@@ -1,8 +1,7 @@
 import Logger from 'bunyan';
-import {LoggerOptions as TypeOrmLoggerOptions} from 'typeorm/logger/LoggerOptions';
-
-import {LoggerMethods, TypeOrmLoggerBase} from '../../core/TypeOrmLoggerBase';
+import type {LoggerOptions as TypeOrmLoggerOptions} from 'typeorm/logger/LoggerOptions';
 import {TextFormatter} from '../../core/formatter/TextFormatter';
+import {type LoggerMethods, TypeOrmLoggerBase} from '../../core/TypeOrmLoggerBase';
 
 export interface BunyanLogLevelMapping {
   log: Logger.LogLevelString;
@@ -31,7 +30,7 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
 
   static toLoggerMethods(logger: Logger, logLevelMapping: BunyanLogLevelMapping | undefined): LoggerMethods {
     if (logLevelMapping === undefined) {
-      return this.createLoggerMethods({
+      return BunyanAdaptor.createLoggerMethods({
         log: (first: unknown, ...rest: unknown[]) => logger.debug(first, ...rest),
         info: (first: unknown, ...rest: unknown[]) => logger.info(first, ...rest),
         warn: (first: unknown, ...rest: unknown[]) => logger.warn(first, ...rest),
@@ -40,7 +39,7 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
     }
 
     const {log, info, warn, error, query, queryError, querySlow, schemaBuild, migration} = logLevelMapping;
-    const result = this.createLoggerMethods({
+    const result = BunyanAdaptor.createLoggerMethods({
       log: (first: unknown, ...rest: unknown[]) => logger[log](first, ...rest),
       info: (first: unknown, ...rest: unknown[]) => logger[info](first, ...rest),
       warn: (first: unknown, ...rest: unknown[]) => logger[warn](first, ...rest),

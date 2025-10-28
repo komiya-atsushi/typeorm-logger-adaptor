@@ -1,5 +1,5 @@
 import {mock, mockReset} from 'jest-mock-extended';
-import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
 // eslint-disable-next-line import/no-unresolved
 import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 import * as winston from 'winston';
@@ -21,19 +21,19 @@ describe('Each logger method', () => {
   describe('logQuery()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['query']];
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQuery('select 1');
 
       expect(mockStream.write).toHaveBeenCalledWith('info: query: select 1\n');
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQuery('select ?', [1]);
 
       expect(mockStream.write).toHaveBeenCalledWith('info: query: select ? -- PARAMETERS: [1]\n');
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQuery('select 1');
 
       expect(mockStream.write).not.toHaveBeenCalled();
@@ -43,7 +43,7 @@ describe('Each logger method', () => {
   describe('logQueryError()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['error']];
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
         'select X from Y',
@@ -52,7 +52,7 @@ describe('Each logger method', () => {
       expect(mockStream.write).toHaveBeenCalledWith(expect.stringMatching(/error: query failed: select X from Y.*/));
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
         'select ? from Y',
@@ -64,7 +64,7 @@ describe('Each logger method', () => {
       );
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
         'select X from Y',
@@ -77,7 +77,7 @@ describe('Each logger method', () => {
   describe('logQuerySlow()', () => {
     const enabledOptions: LoggerOptions[] = allLoggerOptions;
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQuerySlow(2000, 'select sleep(2)');
 
       expect(mockStream.write).toHaveBeenCalledWith(
@@ -85,7 +85,7 @@ describe('Each logger method', () => {
       );
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQuerySlow(2000, 'select sleep(?)', [2]);
 
       expect(mockStream.write).toHaveBeenCalledWith(
@@ -97,13 +97,13 @@ describe('Each logger method', () => {
   describe('logSchemaBuild()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['schema']];
 
-    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
       expect(mockStream.write).toHaveBeenCalledWith('debug: creating a new table: memo\n');
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
       expect(mockStream.write).not.toHaveBeenCalled();
@@ -113,13 +113,13 @@ describe('Each logger method', () => {
   describe('logMigration()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['migration']];
 
-    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
       expect(mockStream.write).toHaveBeenCalledWith('debug: (migration message)\n');
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
       expect(mockStream.write).not.toHaveBeenCalled();

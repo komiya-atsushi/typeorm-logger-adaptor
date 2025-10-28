@@ -1,9 +1,9 @@
 import {mock, mockReset} from 'jest-mock-extended';
 import {DataSource} from 'typeorm';
-import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
 // eslint-disable-next-line import/no-unresolved
 import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
-import {Logger} from 'winston';
+import type {Logger} from 'winston';
 
 import {typeORMConnectionOptions} from './ConnectionOptions';
 import {DatabaseFixture} from './DatabaseFixture';
@@ -43,7 +43,7 @@ async function run(
 }
 
 test('LoggerOptions: all', async () => {
-  await run('all', async mockLogger => {
+  await run('all', async (mockLogger) => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
     expect(mockLogger.info).toHaveBeenCalledTimes(8);
@@ -82,7 +82,7 @@ test('LoggerOptions: query', async () => {
 });
 
 test('LoggerOptions: schema', async () => {
-  await run(['schema'], async mockLogger => {
+  await run(['schema'], async (mockLogger) => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
@@ -122,7 +122,7 @@ test('LoggerOptions: error', async () => {
   await run(['error'], async (mockLogger, conn) => {
     try {
       await conn.query('select col from foo');
-    } catch (e) {
+    } catch (_) {
       // ignore
     }
 

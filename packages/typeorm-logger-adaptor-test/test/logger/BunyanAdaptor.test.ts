@@ -1,7 +1,7 @@
-import * as stream from 'node:stream';
+import type * as stream from 'node:stream';
 import * as bunyan from 'bunyan';
 import {mock, mockReset} from 'jest-mock-extended';
-import {LoggerOptions} from 'typeorm/logger/LoggerOptions';
+import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
 // eslint-disable-next-line import/no-unresolved
 import {BunyanAdaptor} from 'typeorm-logger-adaptor/logger/bunyan';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
@@ -24,7 +24,7 @@ describe('Each logger method', () => {
   describe('logQuery()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['query']];
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select 1');
 
       expect(mockStream.write).toHaveBeenCalledWith({
@@ -39,7 +39,7 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select ?', [1]);
 
       expect(mockStream.write).toHaveBeenCalledWith({
@@ -54,7 +54,7 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select 1');
 
       expect(mockStream.write).not.toHaveBeenCalled();
@@ -64,7 +64,7 @@ describe('Each logger method', () => {
   describe('logQueryError()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['error']];
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
         'select X from Y',
@@ -89,7 +89,7 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
         'select ? from Y',
@@ -115,7 +115,7 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQueryError(
         new Error("Table 'test.Y' doesn't exist"),
         'select X from Y',
@@ -128,7 +128,7 @@ describe('Each logger method', () => {
   describe('logQuerySlow()', () => {
     const enabledOptions: LoggerOptions[] = allLoggerOptions;
 
-    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('w/o parameters (LoggerOptions = %s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQuerySlow(2000, 'select sleep(2)');
 
       expect(mockStream.write).toHaveBeenCalledWith({
@@ -144,7 +144,7 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('with parameters (LoggerOptions = %s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQuerySlow(2000, 'select sleep(?)', [2]);
 
       expect(mockStream.write).toHaveBeenCalledWith({
@@ -164,7 +164,7 @@ describe('Each logger method', () => {
   describe('logSchemaBuild()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['schema']];
 
-    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
       expect(mockStream.write).toHaveBeenCalledWith({
@@ -179,7 +179,7 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logSchemaBuild('creating a new table: memo');
 
       expect(mockStream.write).not.toHaveBeenCalled();
@@ -189,7 +189,7 @@ describe('Each logger method', () => {
   describe('logMigration()', () => {
     const enabledOptions: LoggerOptions[] = [true, 'all', ['migration']];
 
-    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', loggerOptions => {
+    test.each<LoggerOptions>(enabledOptions)('LoggerOptions = %s', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
       expect(mockStream.write).toHaveBeenCalledWith({
@@ -204,7 +204,7 @@ describe('Each logger method', () => {
       });
     });
 
-    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', loggerOptions => {
+    test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logMigration('(migration message)');
 
       expect(mockStream.write).not.toHaveBeenCalled();

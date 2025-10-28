@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner} from 'typeorm';
+import type {MigrationInterface, QueryRunner} from 'typeorm';
 
 export class Test1600000000000 implements MigrationInterface {
   name = 'Test1600000000000';
@@ -7,6 +7,5 @@ export class Test1600000000000 implements MigrationInterface {
     await queryRunner.query("insert into memo(memo) values ('hello')");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(_: QueryRunner): Promise<void> {}
 }

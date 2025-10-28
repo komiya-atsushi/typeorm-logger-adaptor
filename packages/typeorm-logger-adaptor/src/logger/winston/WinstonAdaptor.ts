@@ -1,8 +1,7 @@
-import {LoggerOptions as TypeOrmLoggerOptions} from 'typeorm/logger/LoggerOptions';
-import {LeveledLogMethod, Logger as WinstonLogger} from 'winston';
-
-import {LoggerMethods, TypeOrmLoggerBase} from '../../core/TypeOrmLoggerBase';
+import type {LoggerOptions as TypeOrmLoggerOptions} from 'typeorm/logger/LoggerOptions';
+import type {LeveledLogMethod, Logger as WinstonLogger} from 'winston';
 import {TextFormatter} from '../../core/formatter/TextFormatter';
+import {type LoggerMethods, TypeOrmLoggerBase} from '../../core/TypeOrmLoggerBase';
 
 export interface WinstonLoggerMethodMapping {
   log: LeveledLogMethod;
@@ -47,7 +46,7 @@ export class WinstonAdaptor extends TypeOrmLoggerBase {
           ? (first: unknown, ...rest: unknown[]) => logger.warn(first as string, ...rest)
           : (first: unknown, ...rest: unknown[]) => logger.warning(first as string, ...rest);
 
-      return this.createLoggerMethods({
+      return WinstonAdaptor.createLoggerMethods({
         log: (first: unknown, ...rest: unknown[]) => logger.debug(first as string, ...rest),
         info: (first: unknown, ...rest: unknown[]) => logger.info(first as string, ...rest),
         warn,
@@ -56,7 +55,7 @@ export class WinstonAdaptor extends TypeOrmLoggerBase {
     }
 
     const {log, info, warn, error, query, queryError, querySlow, schemaBuild, migration} = logLevelMapping;
-    const result = this.createLoggerMethods({
+    const result = WinstonAdaptor.createLoggerMethods({
       log: (first: unknown, ...rest: unknown[]) => log(first as string, ...rest),
       info: (first: unknown, ...rest: unknown[]) => info(first as string, ...rest),
       warn: (first: unknown, ...rest: unknown[]) => warn(first as string, ...rest),

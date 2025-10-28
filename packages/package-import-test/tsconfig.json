@@ -3,9 +3,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "ES2023"
-    ],
+    "lib": ["ES2023"],
     "module": "commonjs",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -22,10 +20,6 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

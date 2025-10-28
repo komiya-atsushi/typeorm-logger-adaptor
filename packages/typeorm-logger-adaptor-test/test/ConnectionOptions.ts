@@ -1,5 +1,5 @@
-import {ConnectionOptions as MySQLConnectionOptions} from 'mysql2';
-import {MysqlConnectionOptions as TypeORMConnectionOptions} from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import type {ConnectionOptions as MySQLConnectionOptions} from 'mysql2';
+import type {MysqlConnectionOptions as TypeORMConnectionOptions} from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 import {Memo} from './entity/Memo';
 

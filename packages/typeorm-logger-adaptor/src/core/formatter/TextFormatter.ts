@@ -1,6 +1,6 @@
 import {PlatformTools} from 'typeorm/platform/PlatformTools';
 
-import {Formatter} from './Formatter';
+import type {Formatter} from './Formatter';
 
 export class TextFormatter implements Formatter {
   constructor(private readonly highlightEnabled: boolean = false) {}
@@ -10,7 +10,7 @@ export class TextFormatter implements Formatter {
     return `query: ${q}`;
   }
 
-  formatQueryError(error: string | Error, query: string, parameters?: unknown[]): string {
+  formatQueryError(_error: string | Error, query: string, parameters?: unknown[]): string {
     const q = this.formatQueryWithParameter(query, parameters);
     return `query failed: ${q}`;
   }
@@ -21,7 +21,7 @@ export class TextFormatter implements Formatter {
   }
 
   private formatQueryWithParameter(query: string, parameters?: unknown[]): string {
-    const result = parameters && parameters.length ? `${query} -- PARAMETERS: ${JSON.stringify(parameters)}` : query;
+    const result = parameters?.length ? `${query} -- PARAMETERS: ${JSON.stringify(parameters)}` : query;
     return this.highlightEnabled ? PlatformTools.highlightSql(result) : result;
   }
 }
