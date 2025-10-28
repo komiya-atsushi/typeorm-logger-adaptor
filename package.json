@@ -15,10 +15,8 @@
   },
   "scripts": {
     "biome": "npx @biomejs/biome check --write",
-    "lint": "gts lint",
     "test": "npm run --workspaces test --if-present",
-    "clean": "npm run --workspaces clean --if-present",
-    "fix": "gts fix"
+    "clean": "npm run --workspaces clean --if-present"
   },
   "keywords": [
     "typescript",
@@ -34,8 +32,6 @@
     "@tsconfig/node22": "^22.0.2",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.7.5",
-    "eslint-plugin-import": "^2.31.0",
-    "gts": "^6.0.2",
     "jest": "^29.7.0",
     "jest-junit": "^16.0.0",
     "jest-mock-extended": "^3.0.7",

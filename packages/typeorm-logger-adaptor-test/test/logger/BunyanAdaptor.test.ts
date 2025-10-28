@@ -2,7 +2,6 @@ import type * as stream from 'node:stream';
 import * as bunyan from 'bunyan';
 import {mock, mockReset} from 'jest-mock-extended';
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
-// eslint-disable-next-line import/no-unresolved
 import {BunyanAdaptor} from 'typeorm-logger-adaptor/logger/bunyan';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
 

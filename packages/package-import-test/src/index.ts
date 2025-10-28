@@ -1,5 +1,4 @@
 import {Column, DataSource, Entity, Like, PrimaryGeneratedColumn} from 'typeorm';
-// eslint-disable-next-line import/no-unresolved,n/no-extraneous-import
 import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 import * as winston from 'winston';
 

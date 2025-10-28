@@ -1,6 +1,5 @@
 import {createLogger} from 'bunyan';
 import {DataSource} from 'typeorm';
-// eslint-disable-next-line import/no-unresolved
 import {BunyanAdaptor} from 'typeorm-logger-adaptor/logger/bunyan';
 import {User} from './entity/User';
 

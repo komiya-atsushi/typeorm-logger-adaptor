@@ -1,6 +1,5 @@
 import {mock, mockReset} from 'jest-mock-extended';
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
-// eslint-disable-next-line import/no-unresolved
 import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 import * as winston from 'winston';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';

@@ -1,5 +1,4 @@
 import {DataSource} from 'typeorm';
-// eslint-disable-next-line import/no-unresolved
 import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 import * as winston from 'winston';
 import {User} from './entity/User';
