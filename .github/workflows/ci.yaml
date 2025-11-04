@@ -18,7 +18,7 @@ jobs:
       - run: npm ci
 
       - run: npm -w packages/typeorm-logger-adaptor run build
-      - run: npm run lint
+      - run: npm run biome
 
       - run: npm run test
 
