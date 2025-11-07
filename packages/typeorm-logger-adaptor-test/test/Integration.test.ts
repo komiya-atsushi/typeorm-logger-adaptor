@@ -46,7 +46,7 @@ test('LoggerOptions: all', async () => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
     expect(mockLogger.info).toHaveBeenCalledTimes(8);
-    expect(mockLogger.info).toHaveBeenNthCalledWith(1, 'query: SELECT VERSION() AS `version`');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, 'query: SELECT version()');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
       2,
       'All classes found using provided glob pattern "test/migration/*.ts" : "test/migration/1600000000000-test.ts"',
@@ -107,7 +107,7 @@ test('LoggerOptions: migration', async () => {
       expect(mockLogger.debug).toHaveBeenNthCalledWith(3, '1 migrations are new migrations must be executed.');
       expect(mockLogger.debug).toHaveBeenNthCalledWith(
         4,
-        'Migration Test1600000000000 has been  executed successfully.',
+        'Migration Test1600000000000 has been executed successfully.',
       );
 
       expect(mockLogger.info).toHaveBeenCalledTimes(0);
