@@ -14,7 +14,7 @@
     "winston": "^3.0.0"
   },
   "scripts": {
-    "test": "docker compose up -d && jest --verbose"
+    "test": "docker compose up -d && vitest run"
   },
   "private": true
 }

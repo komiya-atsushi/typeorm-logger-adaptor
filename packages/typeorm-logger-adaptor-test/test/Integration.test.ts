@@ -1,7 +1,8 @@
-import {mock, mockReset} from 'jest-mock-extended';
+import 'reflect-metadata';
 import {DataSource} from 'typeorm';
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
 import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
+import {afterAll, beforeAll, beforeEach, expect, test, vi} from 'vitest';
 import type {Logger} from 'winston';
 
 import {typeORMConnectionOptions} from './ConnectionOptions';
@@ -23,21 +24,57 @@ beforeEach(async () => {
   await fixture.recreateDatabase();
 });
 
+interface MockLogger {
+  debug: ReturnType<typeof vi.fn>;
+  info: ReturnType<typeof vi.fn>;
+  warn: ReturnType<typeof vi.fn>;
+  error: ReturnType<typeof vi.fn>;
+  log: ReturnType<typeof vi.fn>;
+
+  resetMocks: () => void;
+  asTypeOrmLogger: () => Logger;
+}
+
+function createMockLogger(): MockLogger {
+  const mockLogger = {
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    log: vi.fn(),
+  } as MockLogger;
+
+  mockLogger.resetMocks = () => {
+    mockLogger.debug.mockReset();
+    mockLogger.info.mockReset();
+    mockLogger.warn.mockReset();
+    mockLogger.error.mockReset();
+    mockLogger.log.mockReset();
+  };
+
+  mockLogger.asTypeOrmLogger = () => mockLogger as unknown as Logger;
+
+  return mockLogger;
+}
+
 async function run(
   loggerOptions: LoggerOptions,
-  fn: (mockLogger: Logger, conn: DataSource) => Promise<void>,
+  fn: (mockLogger: MockLogger, conn: DataSource) => Promise<void>,
 ): Promise<void> {
-  const mockLogger = mock<Logger>();
+  const mockLogger = createMockLogger();
+
   const dataSource = new DataSource({
     ...typeORMConnectionOptions,
     database,
-    logger: new WinstonAdaptor(mockLogger, loggerOptions),
+    logger: new WinstonAdaptor(mockLogger.asTypeOrmLogger(), loggerOptions),
   });
 
   try {
     await fn(mockLogger, await dataSource.initialize());
   } finally {
-    await dataSource.destroy();
+    if (dataSource.isInitialized) {
+      await dataSource.destroy();
+    }
   }
 }
 
@@ -45,19 +82,15 @@ test('LoggerOptions: all', async () => {
   await run('all', async (mockLogger) => {
     expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
 
-    expect(mockLogger.info).toHaveBeenCalledTimes(8);
+    expect(mockLogger.info).toHaveBeenCalledTimes(7);
     expect(mockLogger.info).toHaveBeenNthCalledWith(1, 'query: SELECT version()');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(2, 'query: START TRANSACTION');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(3, 'query: SELECT DATABASE() AS `db_name`');
     expect(mockLogger.info).toHaveBeenNthCalledWith(
-      2,
-      'All classes found using provided glob pattern "test/migration/*.ts" : "test/migration/1600000000000-test.ts"',
-    );
-    expect(mockLogger.info).toHaveBeenNthCalledWith(3, 'query: START TRANSACTION');
-    expect(mockLogger.info).toHaveBeenNthCalledWith(4, 'query: SELECT DATABASE() AS `db_name`');
-    expect(mockLogger.info).toHaveBeenNthCalledWith(
-      7,
+      6,
       'query: CREATE TABLE `memo` (`id` int NOT NULL AUTO_INCREMENT, `memo` varchar(100) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB',
     );
-    expect(mockLogger.info).toHaveBeenNthCalledWith(8, 'query: COMMIT');
+    expect(mockLogger.info).toHaveBeenNthCalledWith(7, 'query: COMMIT');
 
     expect(mockLogger.warn).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(0);
@@ -68,7 +101,7 @@ test('LoggerOptions: query', async () => {
   await run(['query'], async (mockLogger, conn) => {
     expect(mockLogger.info).toHaveBeenCalledTimes(7);
 
-    mockReset(mockLogger);
+    mockLogger.resetMocks();
 
     await conn.query('select 1');
 
@@ -97,7 +130,7 @@ test('LoggerOptions: migration', async () => {
       'schema', // fixme: workaround of the issue https://github.com/typeorm/typeorm/issues/2793
     ],
     async (mockLogger, conn) => {
-      mockReset(mockLogger);
+      mockLogger.resetMocks();
 
       await conn.runMigrations();
 

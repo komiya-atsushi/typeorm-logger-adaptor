@@ -2,6 +2,7 @@ import type {ConnectionOptions as MySQLConnectionOptions} from 'mysql2';
 import type {MysqlConnectionOptions as TypeORMConnectionOptions} from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 import {Memo} from './entity/Memo';
+import {Test1600000000000} from './migration/1600000000000-test';
 
 const host = '127.0.0.1';
 const port = 13307;
@@ -24,7 +25,7 @@ export const typeORMConnectionOptions: TypeORMConnectionOptions = {
   password,
   entities: [Memo],
   maxQueryExecutionTime: 900,
-  migrations: ['test/migration/*.ts'],
+  migrations: [Test1600000000000],
   synchronize: true,
   migrationsRun: false,
 };

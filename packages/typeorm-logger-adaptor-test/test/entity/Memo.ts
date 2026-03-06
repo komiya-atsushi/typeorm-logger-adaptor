@@ -5,7 +5,7 @@ export class Memo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
+  @Column('varchar', {
     length: 100,
   })
   memo: string;

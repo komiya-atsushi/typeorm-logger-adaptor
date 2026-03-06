@@ -1,14 +1,14 @@
-import type * as stream from 'node:stream';
 import * as bunyan from 'bunyan';
-import {mock, mockReset} from 'jest-mock-extended';
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
 import {BunyanAdaptor} from 'typeorm-logger-adaptor/logger/bunyan';
+import {beforeEach, describe, expect, test} from 'vitest';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
+import {createMockStream} from '../MockStream';
 
-const mockStream = mock<stream.Writable>();
+const mockStream = createMockStream({objectMode: true});
 
 beforeEach(() => {
-  mockReset(mockStream);
+  mockStream.clearMock();
 });
 
 const loggerName = 'test-logger';

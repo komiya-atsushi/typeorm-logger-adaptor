@@ -1,13 +1,14 @@
-import {mock, mockReset} from 'jest-mock-extended';
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
 import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
+import {beforeEach, describe, expect, test} from 'vitest';
 import * as winston from 'winston';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
+import {createMockStream} from '../MockStream';
 
-const mockStream = mock<NodeJS.WritableStream>();
+const mockStream = createMockStream();
 
 beforeEach(() => {
-  mockReset(mockStream);
+  mockStream.clearMock();
 });
 
 describe('Each logger method', () => {
