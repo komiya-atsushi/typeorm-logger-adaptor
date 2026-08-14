@@ -6,7 +6,14 @@
     "isolatedModules": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "paths": {
+      "typeorm": ["./node_modules/typeorm-v0", "../../node_modules/typeorm-v0"],
+      "typeorm/*": [
+        "./node_modules/typeorm-v0/*",
+        "../../node_modules/typeorm-v0/*"
+      ]
+    }
   },
   "include": ["test/**/*.ts"]
 }
