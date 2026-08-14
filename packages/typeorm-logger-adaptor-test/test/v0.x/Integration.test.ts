@@ -5,10 +5,10 @@ import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
 import {afterAll, beforeAll, beforeEach, expect, test, vi} from 'vitest';
 import type {Logger} from 'winston';
 
+import {DatabaseFixture} from '../common/DatabaseFixture';
 import {typeORMConnectionOptions} from './ConnectionOptions';
-import {DatabaseFixture} from './DatabaseFixture';
 
-const database = 'test_winston';
+const database = 'test_winston_v0';
 
 let fixture: DatabaseFixture;
 
@@ -80,7 +80,7 @@ async function run(
 
 test('LoggerOptions: all', async () => {
   await run('all', async (mockLogger) => {
-    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
+    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston_v0.memo');
 
     expect(mockLogger.info).toHaveBeenCalledTimes(7);
     expect(mockLogger.info).toHaveBeenNthCalledWith(1, 'query: SELECT version()');
@@ -115,7 +115,7 @@ test('LoggerOptions: query', async () => {
 
 test('LoggerOptions: schema', async () => {
   await run(['schema'], async (mockLogger) => {
-    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston.memo');
+    expect(mockLogger.debug).toHaveBeenCalledWith('creating a new table: test_winston_v0.memo');
 
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.warn).toHaveBeenCalledTimes(0);
