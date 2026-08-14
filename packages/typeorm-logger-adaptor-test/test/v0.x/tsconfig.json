@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "typeorm": [
+        "../../node_modules/typeorm-v0",
+        "../../../../node_modules/typeorm-v0"
+      ],
+      "typeorm/*": [
+        "../../node_modules/typeorm-v0/*",
+        "../../../../node_modules/typeorm-v0/*"
+      ]
+    }
+  },
+  "include": ["./**/*.ts", "../common/**/*.ts"]
+}

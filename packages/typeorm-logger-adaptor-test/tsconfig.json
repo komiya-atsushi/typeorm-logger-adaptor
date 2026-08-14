@@ -1,12 +1,6 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "build",
-    "isolatedModules": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
     "paths": {
       "typeorm": ["./node_modules/typeorm-v0", "../../node_modules/typeorm-v0"],
       "typeorm/*": [
@@ -15,5 +9,5 @@
       ]
     }
   },
-  "include": ["test/**/*.ts"]
+  "include": ["test/common/**/*.ts"]
 }
