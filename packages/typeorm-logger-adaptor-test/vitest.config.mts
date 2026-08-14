@@ -4,6 +4,7 @@ import {defineConfig} from 'vitest/config';
 
 const require = createRequire(import.meta.url);
 const typeormV0Dir = dirname(require.resolve('typeorm-v0'));
+const typeormV1Dir = dirname(require.resolve('typeorm-v1'));
 
 function typeormAlias(typeormDir: string) {
   return [
@@ -27,6 +28,16 @@ export default defineConfig({
         },
         resolve: {
           alias: typeormAlias(typeormV0Dir),
+        },
+      },
+      {
+        test: {
+          name: 'typeorm-1.x',
+          include: ['test/common/**/*.test.ts', 'test/v1.x/**/*.test.ts'],
+          testTimeout: 60000,
+        },
+        resolve: {
+          alias: typeormAlias(typeormV1Dir),
         },
       },
     ],
