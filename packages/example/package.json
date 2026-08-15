@@ -14,5 +14,7 @@
   "devDependencies": {
     "@types/bunyan": "^1.8.6"
   },
-  "scripts": {}
+  "scripts": {
+    "test:compile": "tsc --noEmit"
+  }
 }

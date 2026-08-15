@@ -16,6 +16,7 @@
   "scripts": {
     "biome": "npx @biomejs/biome check --write",
     "test": "npm run --workspaces test --if-present",
+    "test:compile": "npm run --workspaces test:compile --if-present",
     "clean": "npm run --workspaces clean --if-present"
   },
   "keywords": [
