@@ -95,29 +95,39 @@ export abstract class TypeOrmLoggerBase implements Logger {
   }
 
   // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
-  logQuery(query: string, parameters?: any[], _queryRunner?: QueryRunner): any {
+  logQuery(query: string, parameters?: any[] | Record<string, any>, _queryRunner?: QueryRunner): any {
     this._logQuery(query, parameters);
   }
 
-  protected _logQuery(query: string, parameters?: unknown[]): void {
+  protected _logQuery(query: string, parameters?: unknown[] | Record<string, unknown>): void {
     this.loggerMethods.query(this.formatter.formatQuery(query, parameters));
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
-  logQueryError(error: string | Error, query: string, parameters?: any[], _queryRunner?: QueryRunner): any {
+  // biome-ignore-start lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
+  logQueryError(
+    error: string | Error,
+    query: string,
+    parameters?: any[] | Record<string, any>,
+    _queryRunner?: QueryRunner,
+  ): any {
     this._logQueryError(error, query, parameters);
   }
+  // biome-ignore-end lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
 
-  protected _logQueryError(error: string | Error, query: string, parameters?: unknown[]): void {
+  protected _logQueryError(
+    error: string | Error,
+    query: string,
+    parameters?: unknown[] | Record<string, unknown>,
+  ): void {
     this.loggerMethods.queryError(this.formatter.formatQueryError(error, query, parameters), error);
   }
 
   // biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with TypeORM Logger interface
-  logQuerySlow(time: number, query: string, parameters?: any[], _queryRunner?: QueryRunner): any {
+  logQuerySlow(time: number, query: string, parameters?: any[] | Record<string, any>, _queryRunner?: QueryRunner): any {
     this._logQuerySlow(time, query, parameters);
   }
 
-  protected _logQuerySlow(time: number, query: string, parameters?: unknown[]): void {
+  protected _logQuerySlow(time: number, query: string, parameters?: unknown[] | Record<string, unknown>): void {
     this.loggerMethods.querySlow(this.formatter.formatQuerySlow(time, query, parameters));
   }
 

@@ -33,6 +33,30 @@ describe('Each logger method', () => {
       expect(mockStream.write).toHaveBeenCalledWith('info: query: select ? -- PARAMETERS: [1]\n');
     });
 
+    test.each<LoggerOptions>(enabledOptions)('with object parameters (LoggerOptions = %s)', (loggerOptions) => {
+      new WinstonAdaptor(logger, loggerOptions).logQuery('select :id', {id: 1});
+
+      expect(mockStream.write).toHaveBeenCalledWith('info: query: select :id -- PARAMETERS: {"id":1}\n');
+    });
+
+    test.each<LoggerOptions>(enabledOptions)('with empty object parameters (LoggerOptions = %s)', (loggerOptions) => {
+      new WinstonAdaptor(logger, loggerOptions).logQuery('select 1', {});
+
+      expect(mockStream.write).toHaveBeenCalledWith('info: query: select 1\n');
+    });
+
+    test.each<LoggerOptions>(enabledOptions)(
+      'with circular reference object parameters (LoggerOptions = %s)',
+      (loggerOptions) => {
+        const parameters: Record<string, unknown> = {id: 1};
+        parameters.self = parameters;
+
+        new WinstonAdaptor(logger, loggerOptions).logQuery('select :id', parameters);
+
+        expect(mockStream.write).toHaveBeenCalledWith('info: query: select :id -- PARAMETERS: [object Object]\n');
+      },
+    );
+
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new WinstonAdaptor(logger, loggerOptions).logQuery('select 1');
 

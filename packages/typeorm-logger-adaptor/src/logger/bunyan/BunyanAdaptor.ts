@@ -65,11 +65,15 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
     return result;
   }
 
-  protected _logQuery(query: string, parameters?: unknown[]): void {
+  protected _logQuery(query: string, parameters?: unknown[] | Record<string, unknown>): void {
     this.loggerMethods.query({type: 'Query'}, this.formatter.formatQuery(query, parameters));
   }
 
-  protected _logQueryError(error: string | Error, query: string, parameters?: unknown[]): void {
+  protected _logQueryError(
+    error: string | Error,
+    query: string,
+    parameters?: unknown[] | Record<string, unknown>,
+  ): void {
     const message = this.formatter.formatQueryError(error, query, parameters);
     if (error instanceof Error) {
       this.loggerMethods.queryError({type: 'QueryError', err: Logger.stdSerializers.err(error)}, message);
@@ -78,7 +82,7 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
     }
   }
 
-  protected _logQuerySlow(time: number, query: string, parameters?: unknown[]): void {
+  protected _logQuerySlow(time: number, query: string, parameters?: unknown[] | Record<string, unknown>): void {
     this.loggerMethods.querySlow(
       {type: 'QuerySlow', executionTime: time},
       this.formatter.formatQuerySlow(time, query, parameters),

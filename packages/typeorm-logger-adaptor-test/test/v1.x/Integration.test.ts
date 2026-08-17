@@ -166,6 +166,24 @@ test('LoggerOptions: error', async () => {
   });
 });
 
+test('Object parameters', async () => {
+  await run(['query', 'error'], async (mockLogger, conn) => {
+    mockLogger.resetMocks();
+
+    try {
+      await conn.query('select :id as x', {id: 1});
+    } catch (_) {
+      // the mysql driver does not translate named parameters, so the query fails after being logged
+    }
+
+    expect(mockLogger.info).toHaveBeenCalledWith('query: select :id as x -- PARAMETERS: {"id":1}');
+    expect(mockLogger.error).toHaveBeenCalledWith(
+      'query failed: select :id as x -- PARAMETERS: {"id":1}',
+      expect.any(Error),
+    );
+  });
+});
+
 test('Slow query', async () => {
   await run(['warn'], async (mockLogger, conn) => {
     await conn.query('select sleep(1)');

@@ -53,6 +53,57 @@ describe('Each logger method', () => {
       });
     });
 
+    test.each<LoggerOptions>(enabledOptions)('with object parameters (LoggerOptions = %s)', (loggerOptions) => {
+      new BunyanAdaptor(logger, loggerOptions).logQuery('select :id', {id: 1});
+
+      expect(mockStream.write).toHaveBeenCalledWith({
+        type: 'Query',
+        hostname: expect.any(String),
+        level: bunyan.INFO,
+        msg: 'query: select :id -- PARAMETERS: {"id":1}',
+        name: loggerName,
+        pid: expect.any(Number),
+        time: expect.any(Date),
+        v: 0,
+      });
+    });
+
+    test.each<LoggerOptions>(enabledOptions)('with empty object parameters (LoggerOptions = %s)', (loggerOptions) => {
+      new BunyanAdaptor(logger, loggerOptions).logQuery('select 1', {});
+
+      expect(mockStream.write).toHaveBeenCalledWith({
+        type: 'Query',
+        hostname: expect.any(String),
+        level: bunyan.INFO,
+        msg: 'query: select 1',
+        name: loggerName,
+        pid: expect.any(Number),
+        time: expect.any(Date),
+        v: 0,
+      });
+    });
+
+    test.each<LoggerOptions>(enabledOptions)(
+      'with circular reference object parameters (LoggerOptions = %s)',
+      (loggerOptions) => {
+        const parameters: Record<string, unknown> = {id: 1};
+        parameters.self = parameters;
+
+        new BunyanAdaptor(logger, loggerOptions).logQuery('select :id', parameters);
+
+        expect(mockStream.write).toHaveBeenCalledWith({
+          type: 'Query',
+          hostname: expect.any(String),
+          level: bunyan.INFO,
+          msg: 'query: select :id -- PARAMETERS: [object Object]',
+          name: loggerName,
+          pid: expect.any(Number),
+          time: expect.any(Date),
+          v: 0,
+        });
+      },
+    );
+
     test.each<LoggerOptions>(otherLoggerOptions(enabledOptions))('other LoggerOptions (%s)', (loggerOptions) => {
       new BunyanAdaptor(logger, loggerOptions).logQuery('select 1');
 
