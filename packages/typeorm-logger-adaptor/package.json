@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "bunyan": "^1.8.5",
-    "typeorm": ">=0.2.0 <0.4.0",
+    "typeorm": "^0.2.0 || ^0.3.0 || ^1.0.0",
     "winston": "^3.0.0"
   },
   "main": "dist/index.js",
