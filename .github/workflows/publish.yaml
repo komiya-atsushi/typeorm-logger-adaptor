@@ -62,8 +62,8 @@ jobs:
           npm -w packages/typeorm-logger-adaptor run build
           cp README.md LICENSE CHANGELOG.md packages/typeorm-logger-adaptor/
 
-      - name: Publish
-        run: npm -w packages/typeorm-logger-adaptor publish --provenance --access public
+      - name: Stage publish
+        run: npm -w packages/typeorm-logger-adaptor stage publish --provenance --access public
 
       - name: Push commits and tag
         run: |
