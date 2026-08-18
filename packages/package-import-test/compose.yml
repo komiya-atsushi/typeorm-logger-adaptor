@@ -17,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        TYPEORM_VERSION: ${TYPEORM_VERSION:?TYPEORM_VERSION environment variable is required}
     working_dir: /app
     networks:
       - default

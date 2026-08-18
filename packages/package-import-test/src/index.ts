@@ -28,7 +28,7 @@ async function main(): Promise<void> {
     password: 'test',
     database: 'test',
     entities: [User],
-    logger: new WinstonAdaptor(logger, 'all', true),
+    logger: new WinstonAdaptor(logger, 'all', {highlightSql: true, formatSql: true}),
   }).initialize();
 
   try {

@@ -1,9 +1,11 @@
 FROM node:22-alpine
 
+ARG TYPEORM_VERSION
+
 WORKDIR /app
 
 COPY package.json .
-RUN npm install
+RUN npm install && npm install "typeorm@${TYPEORM_VERSION:?TYPEORM_VERSION build-arg is required}"
 
 COPY src/ src/
 COPY tsconfig.json .
