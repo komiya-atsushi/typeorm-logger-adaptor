@@ -15,7 +15,7 @@
     "winston": "^3.0.0"
   },
   "scripts": {
-    "test": "npm run test:compile && docker compose up -d && vitest run",
+    "test": "npm run test:compile && docker compose up -d --wait && vitest run",
     "test:compile": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p test/v0.x/tsconfig.json && tsc --noEmit -p test/v1.x/tsconfig.json"
   },
   "private": true

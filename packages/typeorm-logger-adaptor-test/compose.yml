@@ -7,3 +7,8 @@ services:
       MYSQL_INITDB_SKIP_TZINFO: y
     ports:
       - 13307:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ptest"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
