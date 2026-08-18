@@ -15,6 +15,13 @@ export interface BunyanLogLevelMapping {
   migration?: Logger.LogLevelString;
 }
 
+export interface BunyanAdaptorOptions {
+  /** Sets true to enable SQL formatting (pretty-printing). */
+  formatSql?: boolean;
+  /** Bunyan log levels that each logger method of the TypeORM uses. */
+  logLevelMapping?: BunyanLogLevelMapping;
+}
+
 export class BunyanAdaptor extends TypeOrmLoggerBase {
   /**
    * Creates a new Bunyan adaptor.
@@ -22,10 +29,44 @@ export class BunyanAdaptor extends TypeOrmLoggerBase {
    * @constructor
    * @param {Logger} logger - The instance of the Bunyan logger.
    * @param {TypeOrmLoggerOptions} options - LoggerOptions of the TypeORM.
+   * @param {BunyanAdaptorOptions} adaptorOptions - Options of this adaptor.
+   */
+  constructor(logger: Logger, options: TypeOrmLoggerOptions, adaptorOptions?: BunyanAdaptorOptions);
+  /**
+   * Creates a new Bunyan adaptor.
+   *
+   * @deprecated Use the options object form instead: `new BunyanAdaptor(logger, options, {logLevelMapping: ...})`.
+   * @constructor
+   * @param {Logger} logger - The instance of the Bunyan logger.
+   * @param {TypeOrmLoggerOptions} options - LoggerOptions of the TypeORM.
    * @param {BunyanLogLevelMapping} logLevelMapping - Bunyan log levels that each logger method of the TypeORM uses.
    */
-  constructor(logger: Logger, options: TypeOrmLoggerOptions, logLevelMapping?: BunyanLogLevelMapping) {
-    super(BunyanAdaptor.toLoggerMethods(logger, logLevelMapping), new TextFormatter(), options);
+  constructor(logger: Logger, options: TypeOrmLoggerOptions, logLevelMapping?: BunyanLogLevelMapping);
+  constructor(
+    logger: Logger,
+    options: TypeOrmLoggerOptions,
+    adaptorOptionsOrLogLevelMapping?: BunyanAdaptorOptions | BunyanLogLevelMapping,
+  ) {
+    const adaptorOptions = BunyanAdaptor.toAdaptorOptions(adaptorOptionsOrLogLevelMapping);
+    super(
+      BunyanAdaptor.toLoggerMethods(logger, adaptorOptions.logLevelMapping),
+      new TextFormatter({formatSql: adaptorOptions.formatSql}),
+      options,
+    );
+  }
+
+  private static toAdaptorOptions(value?: BunyanAdaptorOptions | BunyanLogLevelMapping): BunyanAdaptorOptions {
+    if (value === undefined || value === null) {
+      return {};
+    }
+    return BunyanAdaptor.isLogLevelMapping(value) ? {logLevelMapping: value} : value;
+  }
+
+  private static isLogLevelMapping(
+    value: BunyanAdaptorOptions | BunyanLogLevelMapping,
+  ): value is BunyanLogLevelMapping {
+    // BunyanLogLevelMapping requires all of these keys, while BunyanAdaptorOptions has none of them
+    return 'log' in value && 'info' in value && 'warn' in value && 'error' in value;
   }
 
   static toLoggerMethods(logger: Logger, logLevelMapping: BunyanLogLevelMapping | undefined): LoggerMethods {

@@ -395,3 +395,64 @@ describe('Customized logger methods', () => {
     });
   });
 });
+
+describe('Adaptor options', () => {
+  const logger = bunyan.createLogger({
+    name: loggerName,
+    level: 'trace',
+    streams: [{type: 'raw', stream: mockStream}],
+  });
+
+  test('formatSql: logQuery()', () => {
+    new BunyanAdaptor(logger, 'all', {formatSql: true}).logQuery('SELECT count(1) FROM user WHERE name = ?', ['Taro']);
+
+    expect(mockStream.write).toHaveBeenCalledWith({
+      type: 'Query',
+      hostname: expect.any(String),
+      level: bunyan.INFO,
+      msg: 'query: SELECT count(1)\nFROM user\nWHERE name = ? -- PARAMETERS: ["Taro"]',
+      name: loggerName,
+      pid: expect.any(Number),
+      time: expect.any(Date),
+      v: 0,
+    });
+  });
+
+  test('formatSql is disabled by default', () => {
+    new BunyanAdaptor(logger, 'all', {}).logQuery('SELECT count(1) FROM user WHERE name = ?');
+
+    expect(mockStream.write).toHaveBeenCalledWith({
+      type: 'Query',
+      hostname: expect.any(String),
+      level: bunyan.INFO,
+      msg: 'query: SELECT count(1) FROM user WHERE name = ?',
+      name: loggerName,
+      pid: expect.any(Number),
+      time: expect.any(Date),
+      v: 0,
+    });
+  });
+
+  test('logLevelMapping', () => {
+    const adaptor = new BunyanAdaptor(logger, 'all', {
+      logLevelMapping: {
+        log: 'info',
+        info: 'info',
+        warn: 'info',
+        error: 'info',
+      },
+    });
+    adaptor.logSchemaBuild('creating a new table: memo');
+
+    expect(mockStream.write).toHaveBeenCalledWith({
+      type: 'SchemaBuild',
+      hostname: expect.any(String),
+      level: bunyan.INFO,
+      msg: 'creating a new table: memo',
+      name: loggerName,
+      pid: expect.any(Number),
+      time: expect.any(Date),
+      v: 0,
+    });
+  });
+});
