@@ -69,7 +69,6 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "npm run test:compile && npm run test:attw",
     "test:compile": "tsc --noEmit && tsc --noEmit -p tsconfig.typeorm-v1.json",
-    "test:attw": "attw --pack .",
-    "pretest:attw": "npm run build"
+    "test:attw": "npm run build && attw --pack ."
   }
 }
