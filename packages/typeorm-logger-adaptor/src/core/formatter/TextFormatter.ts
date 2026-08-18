@@ -2,8 +2,13 @@ import {PlatformTools} from 'typeorm/platform/PlatformTools';
 
 import type {Formatter} from './Formatter';
 
+export interface TextFormatterOptions {
+  highlightSql?: boolean;
+  formatSql?: boolean;
+}
+
 export class TextFormatter implements Formatter {
-  constructor(private readonly highlightEnabled: boolean = false) {}
+  constructor(private readonly options: TextFormatterOptions = {}) {}
 
   formatQuery(query: string, parameters?: unknown[] | Record<string, unknown>): string {
     const q = this.formatQueryWithParameter(query, parameters);
@@ -21,9 +26,15 @@ export class TextFormatter implements Formatter {
   }
 
   private formatQueryWithParameter(query: string, parameters?: unknown[] | Record<string, unknown>): string {
+    const formattedQuery = this.options.formatSql ? TextFormatter.formatSql(query) : query;
     const stringified = TextFormatter.stringifyParameters(parameters);
-    const result = stringified !== undefined ? `${query} -- PARAMETERS: ${stringified}` : query;
-    return this.highlightEnabled ? PlatformTools.highlightSql(result) : result;
+    const result = stringified !== undefined ? `${formattedQuery} -- PARAMETERS: ${stringified}` : formattedQuery;
+    return this.options.highlightSql ? PlatformTools.highlightSql(result) : result;
+  }
+
+  private static formatSql(query: string): string {
+    // PlatformTools.formatSql is not available in older versions of TypeORM
+    return typeof PlatformTools.formatSql === 'function' ? PlatformTools.formatSql(query) : query;
   }
 
   private static stringifyParameters(parameters?: unknown[] | Record<string, unknown>): string | undefined {

@@ -16,10 +16,29 @@ export interface WinstonLoggerMethodMapping {
   migration?: LeveledLogMethod;
 }
 
+export interface WinstonAdaptorOptions {
+  /** Sets true to enable SQL highlighting. */
+  highlightSql?: boolean;
+  /** Sets true to enable SQL formatting (pretty-printing). */
+  formatSql?: boolean;
+  /** Mappings between Winston logger methods and TypeORM logger methods. */
+  loggerMethodMapping?: WinstonLoggerMethodMapping;
+}
+
 export class WinstonAdaptor extends TypeOrmLoggerBase {
   /**
    * Creates a new Winston adaptor.
    *
+   * @constructor
+   * @param {WinstonLogger} logger - The logger instance of the Winston logger.
+   * @param {TypeOrmLoggerOptions} options - LoggerOptions of the TypeORM.
+   * @param {WinstonAdaptorOptions} adaptorOptions - Options of this adaptor.
+   */
+  constructor(logger: WinstonLogger, options: TypeOrmLoggerOptions, adaptorOptions?: WinstonAdaptorOptions);
+  /**
+   * Creates a new Winston adaptor.
+   *
+   * @deprecated Use the options object form instead: `new WinstonAdaptor(logger, options, {highlightSql: ...})`.
    * @constructor
    * @param {WinstonLogger} logger - The logger instance of the Winston logger.
    * @param {TypeOrmLoggerOptions} options - LoggerOptions of the TypeORM.
@@ -29,10 +48,25 @@ export class WinstonAdaptor extends TypeOrmLoggerBase {
   constructor(
     logger: WinstonLogger,
     options: TypeOrmLoggerOptions,
-    highlightSqlEnabled = false,
+    highlightSqlEnabled?: boolean,
+    loggerMethodMapping?: WinstonLoggerMethodMapping,
+  );
+  constructor(
+    logger: WinstonLogger,
+    options: TypeOrmLoggerOptions,
+    adaptorOptionsOrHighlightSqlEnabled?: WinstonAdaptorOptions | boolean,
     loggerMethodMapping?: WinstonLoggerMethodMapping,
   ) {
-    super(WinstonAdaptor.toLoggerMethods(logger, loggerMethodMapping), new TextFormatter(highlightSqlEnabled), options);
+    const adaptorOptions: WinstonAdaptorOptions =
+      typeof adaptorOptionsOrHighlightSqlEnabled === 'object' && adaptorOptionsOrHighlightSqlEnabled !== null
+        ? adaptorOptionsOrHighlightSqlEnabled
+        : {highlightSql: adaptorOptionsOrHighlightSqlEnabled, loggerMethodMapping};
+
+    super(
+      WinstonAdaptor.toLoggerMethods(logger, adaptorOptions.loggerMethodMapping),
+      new TextFormatter({highlightSql: adaptorOptions.highlightSql, formatSql: adaptorOptions.formatSql}),
+      options,
+    );
   }
 
   static toLoggerMethods(

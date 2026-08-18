@@ -218,6 +218,56 @@ describe('Customized logger methods', () => {
   });
 });
 
+describe('Adaptor options', () => {
+  const logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.simple(),
+    transports: [new winston.transports.Stream({stream: mockStream})],
+  });
+
+  test('formatSql: logQuery()', () => {
+    new WinstonAdaptor(logger, 'all', {formatSql: true}).logQuery('SELECT count(1) FROM user WHERE name = ?', ['Taro']);
+
+    expect(mockStream.write).toHaveBeenCalledWith(
+      'info: query: SELECT count(1)\nFROM user\nWHERE name = ? -- PARAMETERS: ["Taro"]\n',
+    );
+  });
+
+  test('formatSql: logQueryError()', () => {
+    new WinstonAdaptor(logger, 'all', {formatSql: true}).logQueryError(
+      new Error("Table 'test.user' doesn't exist"),
+      'SELECT count(1) FROM user WHERE name = ?',
+      ['Taro'],
+    );
+
+    expect(mockStream.write).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /^error: query failed: SELECT count\(1\)\nFROM user\nWHERE name = \? -- PARAMETERS: \["Taro"]/,
+      ),
+    );
+  });
+
+  test('formatSql is disabled by default', () => {
+    new WinstonAdaptor(logger, 'all', {}).logQuery('SELECT count(1) FROM user WHERE name = ?');
+
+    expect(mockStream.write).toHaveBeenCalledWith('info: query: SELECT count(1) FROM user WHERE name = ?\n');
+  });
+
+  test('loggerMethodMapping', () => {
+    const adaptor = new WinstonAdaptor(logger, 'all', {
+      loggerMethodMapping: {
+        log: logger.info,
+        info: logger.info,
+        warn: logger.info,
+        error: logger.info,
+      },
+    });
+    adaptor.logSchemaBuild('creating a new table: memo');
+
+    expect(mockStream.write).toHaveBeenCalledWith('info: creating a new table: memo\n');
+  });
+});
+
 describe('Using syslog levels', () => {
   const logger = winston.createLogger({
     levels: winston.config.syslog.levels,
