@@ -25,6 +25,7 @@ export default defineConfig({
           name: 'typeorm-0.x',
           include: ['test/common/**/*.test.ts', 'test/v0.x/**/*.test.ts'],
           testTimeout: 60000,
+          hookTimeout: 60000,
         },
         resolve: {
           alias: typeormAlias(typeormV0Dir),
@@ -35,6 +36,7 @@ export default defineConfig({
           name: 'typeorm-1.x',
           include: ['test/common/**/*.test.ts', 'test/v1.x/**/*.test.ts'],
           testTimeout: 60000,
+          hookTimeout: 60000,
         },
         resolve: {
           alias: typeormAlias(typeormV1Dir),
