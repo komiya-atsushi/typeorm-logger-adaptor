@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.0 / 2026-08-18
+
+- Support TypeORM 1.x. The `typeorm` peer dependency is now `^0.2.0 || ^0.3.0 || ^1.0.0`.
+- Format object-style query parameters in query logs.
+- Add options object form to the adaptor constructors, with a new `formatSql` option to pretty-print SQL statements. The conventional positional arguments are deprecated.
+- Run tests against both TypeORM 0.3.x and 1.x.
+
 ## v1.2.0 / 2024-11-09
 
 - *No functional changes in production code.*
