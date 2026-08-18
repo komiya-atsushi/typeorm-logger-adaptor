@@ -27,7 +27,7 @@ jobs:
         if: success() || failure()
         with:
           name: test-results
-          path: packages/typeorm-logger-adaptor-test/reports/jest-junit.xml
+          path: packages/typeorm-logger-adaptor-test/reports/vitest-junit.xml
 
   test-package-import:
     runs-on: ubuntu-latest
