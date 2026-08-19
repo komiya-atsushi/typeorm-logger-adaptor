@@ -1,15 +1,20 @@
 import {createRequire} from 'node:module';
 import {dirname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {defineConfig} from 'vitest/config';
 
 const require = createRequire(import.meta.url);
 const typeormV0Dir = dirname(require.resolve('typeorm-v0'));
 const typeormV1Dir = dirname(require.resolve('typeorm-v1'));
+const adaptorSrcDir = fileURLToPath(new URL('../typeorm-logger-adaptor/src', import.meta.url));
 
-function typeormAlias(typeormDir: string) {
+function projectAlias(typeormDir: string) {
   return [
     {find: /^typeorm$/, replacement: typeormDir},
     {find: /^typeorm\/(.*)$/, replacement: join(typeormDir, '$1')},
+    // Resolve the adaptor to its TypeScript source (not the prebuilt CJS dist) so that
+    // the typeorm aliases above also apply to its internal typeorm imports
+    {find: /^typeorm-logger-adaptor\/logger\/(.*)$/, replacement: join(adaptorSrcDir, 'logger/$1')},
   ];
 }
 
@@ -28,7 +33,7 @@ export default defineConfig({
           hookTimeout: 60000,
         },
         resolve: {
-          alias: typeormAlias(typeormV0Dir),
+          alias: projectAlias(typeormV0Dir),
         },
       },
       {
@@ -39,7 +44,7 @@ export default defineConfig({
           hookTimeout: 60000,
         },
         resolve: {
-          alias: typeormAlias(typeormV1Dir),
+          alias: projectAlias(typeormV1Dir),
         },
       },
     ],
