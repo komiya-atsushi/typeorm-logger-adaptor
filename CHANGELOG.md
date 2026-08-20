@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.1 / 2026-08-20
+
+- Mark the logger peer dependencies (bunyan and winston) as optional, so that npm no longer installs unused logger libraries automatically.
+
 ## v1.3.0 / 2026-08-18
 
 - Support TypeORM 1.x. The `typeorm` peer dependency is now `^0.2.0 || ^0.3.0 || ^1.0.0`.
