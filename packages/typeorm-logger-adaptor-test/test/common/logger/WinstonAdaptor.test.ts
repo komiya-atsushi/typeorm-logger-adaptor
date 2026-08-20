@@ -1,5 +1,5 @@
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
-import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/winston';
 import {beforeEach, describe, expect, test} from 'vitest';
 import * as winston from 'winston';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';

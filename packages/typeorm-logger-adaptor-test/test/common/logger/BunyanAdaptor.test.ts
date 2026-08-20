@@ -1,6 +1,6 @@
 import * as bunyan from 'bunyan';
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
-import {BunyanAdaptor} from 'typeorm-logger-adaptor/logger/bunyan';
+import {BunyanAdaptor} from 'typeorm-logger-adaptor/bunyan';
 import {beforeEach, describe, expect, test} from 'vitest';
 import {allLoggerOptions, otherLoggerOptions} from '../LoggingOptions';
 import {createMockStream} from '../MockStream';

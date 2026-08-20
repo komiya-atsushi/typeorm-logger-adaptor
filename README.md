@@ -28,7 +28,7 @@ How to use
 ----------
 
 1. Install `typeorm-logger-adaptor`, `typeorm` and a logger library you want to use.
-2. `import { XxxAdaptor } from 'typeorm-logger-adaptor/logger/xxx';`.
+2. `import { XxxAdaptor } from 'typeorm-logger-adaptor/xxx';`.
     * Replace `xxx` with logger library name (e.g. `winston`, `bunyan`).
 3. Create and configure a logger instance. 
 4. Create an adaptor instance and configure TypeORM connection.
@@ -40,7 +40,7 @@ Example
 ```typescript
 import {DataSource} from 'typeorm';
 import * as winston from 'winston';
-import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/winston';
 
 async function example(): Promise<void> {
   // Configure logger (Winston)

@@ -1,6 +1,6 @@
 import {createLogger} from 'bunyan';
 import {DataSource} from 'typeorm';
-import {BunyanAdaptor} from 'typeorm-logger-adaptor/logger/bunyan';
+import {BunyanAdaptor} from 'typeorm-logger-adaptor/bunyan';
 import {User} from './entity/User';
 
 async function main(): Promise<void> {

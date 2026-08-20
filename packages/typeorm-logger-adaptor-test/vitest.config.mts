@@ -14,7 +14,7 @@ function projectAlias(typeormDir: string) {
     {find: /^typeorm\/(.*)$/, replacement: join(typeormDir, '$1')},
     // Resolve the adaptor to its TypeScript source (not the prebuilt CJS dist) so that
     // the typeorm aliases above also apply to its internal typeorm imports
-    {find: /^typeorm-logger-adaptor\/logger\/(.*)$/, replacement: join(adaptorSrcDir, 'logger/$1')},
+    {find: /^typeorm-logger-adaptor\/(.*)$/, replacement: join(adaptorSrcDir, 'logger/$1')},
   ];
 }
 

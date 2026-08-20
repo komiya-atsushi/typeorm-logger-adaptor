@@ -1,5 +1,5 @@
 import {DataSource} from 'typeorm';
-import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/winston';
 import * as winston from 'winston';
 import {User} from './entity/User';
 

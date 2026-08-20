@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import {DataSource} from 'typeorm';
 import type {LoggerOptions} from 'typeorm/logger/LoggerOptions';
-import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/winston';
 import {afterAll, beforeAll, beforeEach, expect, test, vi} from 'vitest';
 import type {Logger} from 'winston';
 

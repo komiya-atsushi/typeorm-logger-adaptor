@@ -1,5 +1,5 @@
 import {Column, DataSource, Entity, Like, PrimaryGeneratedColumn} from 'typeorm';
-import {WinstonAdaptor} from 'typeorm-logger-adaptor/logger/winston';
+import {WinstonAdaptor} from 'typeorm-logger-adaptor/winston';
 import * as winston from 'winston';
 
 @Entity()
