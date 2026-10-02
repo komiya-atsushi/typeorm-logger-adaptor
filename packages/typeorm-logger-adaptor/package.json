@@ -26,13 +26,11 @@
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.6",
-    "bunyan": "^1.8.5",
     "typeorm": "^0.3.0",
     "typeorm-v1": "npm:typeorm@^1.1.0",
     "winston": "^3.0.0"
   },
   "peerDependencies": {
-    "bunyan": "^1.8.5",
     "typeorm": "^0.2.0 || ^0.3.0 || ^1.0.0",
     "winston": "^3.0.0"
   },
@@ -78,5 +76,8 @@
     "test": "npm run test:compile && npm run test:attw",
     "test:compile": "tsc --noEmit && tsc --noEmit -p tsconfig.typeorm-v1.json",
     "test:attw": "npm run build && attw --pack ."
+  },
+  "dependencies": {
+    "bunyan": "^1.8.15"
   }
 }

@@ -6,7 +6,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "bunyan": "^1.8.5",
+    "bunyan": "^1.8.15",
     "typeorm": "^0.3.27",
     "typeorm-logger-adaptor": "^1.1.0",
     "winston": "^3.0.0"

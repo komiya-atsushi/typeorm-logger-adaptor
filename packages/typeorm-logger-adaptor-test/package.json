@@ -5,10 +5,10 @@
     "node": ">=18"
   },
   "dependencies": {
+    "bunyan": "^1.8.15",
     "typeorm-logger-adaptor": "^1.1.0"
   },
   "devDependencies": {
-    "bunyan": "^1.8.5",
     "mysql2": "^3.23.3",
     "typeorm-v0": "npm:typeorm@^0.3.31",
     "typeorm-v1": "npm:typeorm@^1.1.0",
